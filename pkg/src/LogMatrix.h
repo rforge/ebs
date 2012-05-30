@@ -51,27 +51,6 @@ public:
 };
 
 
-
-template<typename FunctionTypeName>
-std::ostream &operator<<(std::ostream &s, const LogMatrix<FunctionTypeName> &M)
-{
-	for (int i = 0; i < M.Size; i++)
-	{
-		double Min = 10000000000;
-		double Max = -10000000000;
-		for (int j = i+1; j< M.Size; j++)
-		{
-			if (Min > M.Data[i][j])
-				Min = M.Data[i][j];
-			if (Max < M.Data[i][j])
-				Max = M.Data[i][j];
-		}
-		s << "(" << i<< " [" << Min << ", " << Max << "])\t";
-	}
-	s << std::endl;
-	return s;
-}
-
 template<typename FunctionTypeName>
 void LogMatrix<FunctionTypeName>::operator =(const LogMatrix<FunctionTypeName> &Original)
 {

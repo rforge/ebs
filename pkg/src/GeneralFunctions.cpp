@@ -9,6 +9,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <cstdlib>
 #include <string>
 #include "GeneralFunctions.h"
 #include "MyVector.h"
@@ -78,7 +79,7 @@ bool ToNext(char *Buffer, int &BuffIndex, int BufferSize, char Separator, char T
 
 int GetRandomNumber(int MinValue, int MaxValue)
 {
-  long int x = random();
+  long int x = rand();
   double y = (MaxValue - MinValue + 1) * ((double) x) / RAND_MAX;
   int Res = MinValue + y;
   return Res;

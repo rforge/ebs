@@ -170,7 +170,7 @@ void Moyenne(int *Siz, double* Data, double* P)
     {
 	for (int l=0; l<(j-i); l++)
 	  P[i*Size+j] += Data[i+l];
-	P[i*Size+j]/(j-i);
+	P[i*Size+j]/=(j-i);
     }
   return;
 }
@@ -230,7 +230,6 @@ void ComputeBIC(int *Siz, int *Kmax, double* Col, double* BIC)
 void PosteriorK(int *Siz, int *Kmax, double* Col, double* PostK)
 {
   int K = *Kmax;
-  int Size = *Siz;
   ComputeBIC(Siz, Kmax, Col, PostK);
   double Total = 0;
   double Max = PostK[0];
@@ -249,7 +248,6 @@ void PosteriorK(int *Siz, int *Kmax, double* Col, double* PostK)
 void KBIC(int *Siz, int *Kmax, double* Col, int* kBIC)
 {
   int K = *Kmax;
-  int Size = *Siz;
   double* nBIC = new double[K];
   for (int i=0; i<K; i++)
     nBIC[i]=0;
@@ -270,7 +268,6 @@ void KBIC(int *Siz, int *Kmax, double* Col, int* kBIC)
 
 void PostMean(int *Siz, int *Kk, double* Data, double* Col, double* Li, double *P, double *Post)
 {
-  int K = *Kk;
   int Size = *Siz;
   double* PS= new double[Size*Size];
   for (int l=0; l<(Size*Size); l++)
