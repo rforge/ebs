@@ -1,0 +1,2 @@
+useDynLib(EBS)
+exportPattern("^[[:alpha:]]+")
