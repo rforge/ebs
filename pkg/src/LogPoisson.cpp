@@ -27,7 +27,6 @@ double LogPoisson::operator()(int a, int b)
   double L = LesObs.LogFactorialInSegment(a,b);
   int n = b-a;
   double Res = lgamma(S+alpha)-(S+alpha)*log(n+beta)-L+alpha*log(beta)-lgamma(alpha);
-  //double Res = lgamma(S+alpha)-(S+alpha)*log(n+beta)-L+alpha*log(beta);
   return Res;
 }
 

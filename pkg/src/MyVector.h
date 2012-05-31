@@ -83,8 +83,6 @@ public:
 	void sort();
 };
 
-MyVector<int> IntersectLists(const MyVector<int> &A, const MyVector<int> &B);
-MyVector<int> GetBreakpoints(int k, int n, int** M);
 
 template<typename T>
 void MyVector<T>::erase(const MyVector::iterator &First, const MyVector::iterator &Last)

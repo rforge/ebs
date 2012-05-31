@@ -29,8 +29,6 @@ public:
   MyVector<T> y;
   Observations();
   Observations(MyVector<T> &v);
-  Observations(std::string FileName, bool Binaire = false);
-  Observations(std::string FileName, int FirstIndex, int LastIndex, bool Binaire = false);
   T SumInSegment(int a, int b);
   double MeanInSegment(int a, int b);
   double VarInSegment(int a, int b);
@@ -59,95 +57,6 @@ Observations<T>::Observations(MyVector<T> &v)
   y = v;
 }
 
-template<typename DataTypeName>
-Observations<DataTypeName>::Observations(std::string FileName, bool Binaire)
-{
-  std::ifstream TheFile(FileName.c_str());
-  if (!TheFile.is_open())
-  {
-    std::cerr << "Can't open the file " << FileName << ". Getting out with errcode 200" << std::endl;
-    exit(200);
-  }
-	if (Binaire)
-	{
-		TheFile.seekg(0, std::ios::end);
-		int NbElements =TheFile.tellg() / sizeof(DataTypeName);
-		TheFile.seekg(0, std::ios::beg);
-		for (int i = 0; i < NbElements; i++)
-		{
-			DataTypeName CurElement;
-			TheFile.read((char *) &CurElement, 1 * sizeof(DataTypeName));
-			y.push_back(CurElement);
-		}
-	}
-	else
-	{
-		char *Buffer;
-		TheFile.seekg(0, std::ios::end);
-		int FileSize = TheFile.tellg();
-		Buffer = new char[FileSize];
-		TheFile.seekg(0, std::ios::beg);
-		TheFile.read(Buffer, FileSize * sizeof(char));
-		int BuffIndex = 0;
-		DataTypeName Res;
-		bool SansInteret;
-		while (NextNumber<DataTypeName>(Buffer, BuffIndex, FileSize, Res, SansInteret))
-			y.push_back(Res);
-		delete[] Buffer;
-	}
-	TheFile.close();
-}
-
-template<typename DataTypeName>
-Observations<DataTypeName>::Observations(std::string FileName, int FirstIndex, int LastIndex, bool Binaire)
-{
-  std::ifstream TheFile(FileName.c_str());
-  if (!TheFile.is_open())
-  {
-    std::cerr << "Can't open the file " << FileName << ". Getting out with errcode 200" << std::endl;
-    exit(200);
-  }
-	if (Binaire)
-	{
-		int NbElements = LastIndex - FirstIndex + 1;
-		int begin = (FirstIndex - 1) * sizeof(DataTypeName);
-		TheFile.seekg(begin, std::ios::beg);
-		for (int i = 0; i < NbElements; i++)
-		{
-			DataTypeName CurElement;
-			TheFile.read((char *) &CurElement, 1 * sizeof(DataTypeName));
-			y.push_back(CurElement);
-		}
-	}
-	else
-	{
-		char *Buffer;
-		TheFile.seekg(0, std::ios::end);
-		int FileSize = TheFile.tellg();
-		int NbElements = LastIndex - FirstIndex + 1;
-		Buffer = new char[FileSize];
-		TheFile.seekg(0, std::ios::beg);
-		TheFile.read(Buffer, FileSize * sizeof(char));
-		int BuffIndex = 0;
-		DataTypeName Res;
-		bool SansInteret;
-		MyVector<DataTypeName> trash;
-		while (trash.size() < FirstIndex - 1)
-		{
-			bool NumberFound = NextNumber<DataTypeName>(Buffer, BuffIndex, FileSize, Res, SansInteret);
-			if (NumberFound)
-				trash.push_back(Res);
-		}
-		while (y.size() < NbElements)
-		{
-			bool NumberFound = NextNumber<DataTypeName>(Buffer, BuffIndex, FileSize, Res, SansInteret);
-			if (NumberFound)
-				y.push_back(Res);
-		}
-		delete[] Buffer;
-	}
-	TheFile.close();
-}
 
 
 template<typename T>
@@ -155,14 +64,7 @@ T Observations<T>::SumInSegment(int a, int b)
 {
   T S=0;
   for (int i = a; i < b; i++)
-	{
     		S += y[i];
-		if (y[i] < 0)
-		{
-			std::cerr << "Illicite data." << std::endl;
-			exit(102);
-		}
-	}
   return S;
 }
 
@@ -217,17 +119,6 @@ public:
 };
 
 
-template<typename T>
-std::ostream &operator<<(std::ostream &s, const VectObservations<T> &VO)
-{
-  for (int j = 0; j < VO.ReplicateObs[0].y.size(); j++)
-    {
-      for (int i = 0; i < VO.ReplicateObs.size(); i++)
-        s <<  VO.ReplicateObs[i].y[j] << "  ";
-      s << std::endl;
-    }
-  return s;
-}
 
 template<typename T>
 VectObservations<T> VectObservations<T>::operator=(VectObservations<T> Other)
@@ -251,7 +142,6 @@ VectObservations<T>::VectObservations()
 template<typename T>
 VectObservations<T>::VectObservations(MyVector<Observations<T> > &V)
 {
-	// TODO: Check this (Need a push_back for each element?)
   ReplicateObs = V;
 }
 
@@ -268,11 +158,6 @@ MyVector<T> VectObservations<T>::SumInSegment(int a, int b)
   for (int j = 0; j < ReplicateObs.size(); j++)
     {
       T l= ReplicateObs[j].SumInSegment(a,b);
-      if (l < 0)
-	{
-		std::cerr << "I unhappy. Getting out." << std::endl;
-		exit(103);
-	}
       S.push_back(l);
     }
   return S;

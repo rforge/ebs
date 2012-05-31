@@ -19,12 +19,7 @@
 
 
 bool IsDigit(char &x);
-bool ToNext(char *Buffer, int &BuffIndex, int BufferSize, char Separator=Separateur, char Terminator=FinDeLigne);
 int GetRandomNumber(int MinValue, int MaxValue);
-void WriteAllWithTime(int N, int K, int nbODPA, int nbrupidentik, double Relative, double tPDPA, double tCart, const char* FileName);
-void WriteTypeWithTime(int choice, int N, int K, int nbODPA, double tPDPA, double tODPA, const char* FileName);
-void WriteMatrix(int nrow, int ncol, double **MyMatrix, const char* FileName);
-void WriteVector(int nrow, double *MyVector, const char* FileName);
 double lsum(double la, double lb);
 double sumoflogs(double la, double lb);
 double Norma(int a, int b, int k);
