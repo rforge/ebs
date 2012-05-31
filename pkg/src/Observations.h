@@ -33,16 +33,8 @@ public:
   double MeanInSegment(int a, int b);
   double VarInSegment(int a, int b);
   double LogFactorialInSegment(int a, int b);
-  std::ostream &operator<<(std::ostream &s);
+  double LogGammaPhiInSegment(int a, int b, double phi);
 };
-
-template<typename T>
-std::ostream &operator<<(std::ostream &s, const Observations<T> &O)
-{
-  for (int i=0; i<O.y.size(); i++)
-    s <<  O.y[i] << std::endl;
-  return s;
-}
 
 
 
@@ -97,8 +89,22 @@ double Observations<T>::LogFactorialInSegment(int a, int b)
     return 0;
   double S = 0;
   for (int i = a; i < b; i++)
+  /*
 	for (int j=1; j < (y[i] + 1); j++)
 	    S += log(j);
+  */
+    S += lgamma(y[i]+1);
+  return S;
+}
+
+template<typename T>
+double Observations<T>::LogGammaPhiInSegment(int a, int b, double phi)
+{
+  if (a==b)
+    return 0;
+  double S = 0;
+  for (int i = a; i < b; i++)
+    S += lgamma(y[i]+phi);
   return S;
 }
 

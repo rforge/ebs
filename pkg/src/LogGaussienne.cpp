@@ -31,7 +31,7 @@ double LogGaussienne::operator()(int a, int b)
   double V = LesObs.VarInSegment(a,b);
   int n = b-a;
   double theta = 2/(n*V+s0+n*n0*(M-mu0)*(M-mu0)/(n+n0));
-  double Res = lgamma((n+nu0)/2)-log(n+n0)/2+(n+nu0)/2*log(theta);
+  double Res = lgamma((n+nu0)/2)+(log(n0)-log(n+n0))/2+(n+nu0)/2*log(theta)+nu0/2*log(s0/2)-lgamma(nu0/2)-n/2*log(2*M_PI);
   return Res;
 }
 

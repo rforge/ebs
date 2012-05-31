@@ -27,8 +27,9 @@ double LogBinNeg::operator()(int a, int b)
     return 0;
   int S = LesObs.SumInSegment(a,b);
   double L = LesObs.LogFactorialInSegment(a,b);
+  double P = LesObs.LogGammaPhiInSegment(a,b,phi);
   int n = b-a;
-  double Res = lgamma(beta+n*phi)+lgamma(S+alpha)-lgamma(beta+alpha+n*phi+S)-L;
+  double Res = lgamma(beta+n*phi)+lgamma(S+alpha)-lgamma(a)-lgamma(b) +lgamma(a+b)-lgamma(beta+alpha+n*phi+S)-L+P;
   return Res;
 }
 

@@ -11,20 +11,20 @@ void CallEBSPoisson(int *Size, int *KMax, double* hyper, int* Data, double* Col,
     double Hyper2 = hyper[1];
     MyVector<int> MyData(n,0);
     for (int i=0; i<n; i++)
-	MyData[i] = Data[i];
+	  MyData[i] = Data[i];
     Observations<int> LesObservations(MyData);
     LogPoisson BN(LesObservations, Hyper1, Hyper2);
     Distributions<LogPoisson> Dis(n+1, K, &BN);
     for (int k=0; k<K; k++)
-	for (int i=0; i<(n+1); i++)
-	{
-	  Li[k*(n+1)+i]=Dis.GetDataLi()[k][i];
-	  Col[k*(n+1)+i]=Dis.GetDataCol()[i][k];
-	}
+	  for (int i=0; i<(n+1); i++)
+	  {
+	    Li[k*(n+1)+i]=Dis.GetDataLi()[k][i];
+	    Col[k*(n+1)+i]=Dis.GetDataCol()[i][k];
+	  }
 
     for (int i=0; i<(n+1); i++)
-	for (int j=0; j<(n+1); j++)
-	  P[i*(n+1)+j]=Dis.P.Data[i][j];
+	  for (int j=0; j<(n+1); j++)
+	    P[i*(n+1)+j]=Dis.P.Data[i][j];
 
     return;
 }
@@ -38,20 +38,20 @@ void CallEBSBinNeg(int *Size, int *KMax, double* hyper, double* theta, int* Data
     double Theta = *theta;
     MyVector<int> MyData(n,0);
     for (int i=0; i<n; i++)
-	MyData[i] = Data[i];
+	  MyData[i] = Data[i];
     Observations<int> LesObservations(MyData);
     LogBinNeg BN(LesObservations, Theta, Hyper1, Hyper2);
     Distributions<LogBinNeg> Dis(n+1, K, &BN);
     for (int k=0; k<K; k++)
-	for (int i=0; i<(n+1); i++)
-	{
-	  Li[k*(n+1)+i]=Dis.GetDataLi()[k][i];
-	  Col[k*(n+1)+i]=Dis.GetDataCol()[i][k];
-	}
+	  for (int i=0; i<(n+1); i++)
+	  {
+	    Li[k*(n+1)+i]=Dis.GetDataLi()[k][i];
+	    Col[k*(n+1)+i]=Dis.GetDataCol()[i][k];
+	  }
 
     for (int i=0; i<(n+1); i++)
-	for (int j=0; j<(n+1); j++)
-	  P[i*(n+1)+j]=Dis.P.Data[i][j];
+	  for (int j=0; j<(n+1); j++)
+	    P[i*(n+1)+j]=Dis.P.Data[i][j];
     return;
 }
 

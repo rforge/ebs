@@ -33,54 +33,5 @@ void Swap(T &A, T &B)
 	B = C;
 }
 
-// In this function, Buffer is a table of characters, BuffIndex is the current reading location and BufferSize its global size.
-// The next integer is read and its value is stocked in Res.
-
-template <typename DataTypeName>
-bool NextNumber(char *Buffer, int &BuffIndex, int &BufferSize, DataTypeName &Res, bool &VuRetourChariot, char Separator=Separateur, char Terminator=FinDeLigne)
-{
-  Res = 0;
-  VuRetourChariot = false;
-  while ((BuffIndex < BufferSize) && (!IsDigit(Buffer[BuffIndex]) && (Buffer[BuffIndex] != '-')))
-  {
-    if (Buffer[BuffIndex] == '\n')
-      VuRetourChariot = true;
-    BuffIndex++;
-  }
-  if (BuffIndex == BufferSize)
-  {
-    Res = -1;
-    return false;
-  }
-	int Signe = 1;
-	if (Buffer[BuffIndex] == '-')
-	{
-		Signe = -1;
-		BuffIndex++;
-	}
-  Res = 0;
-  while ((BuffIndex < BufferSize) && (IsDigit(Buffer[BuffIndex])))
-    Res = 10 * Res + Buffer[BuffIndex++] - '0';
-  if (Buffer[BuffIndex] == '.')
-  {
-    BuffIndex++;
-    double P = 1;
-    while ((BuffIndex < BufferSize) && (IsDigit(Buffer[BuffIndex])))
-    {
-      P /= 10;
-      Res += (Buffer[BuffIndex++] - '0') * P;
-    }
-  }
-	Res *= Signe;
-	int FormerBufferIndex = BuffIndex;
-	ToNext(Buffer, BuffIndex, BufferSize, Separator, Terminator);
-	for (int i = FormerBufferIndex; i < BuffIndex; i++)
-		if (Buffer[i] == Terminator)
-		{
-			VuRetourChariot = true;
-			break;
-		}
-  return true;
-}
 
 #endif
