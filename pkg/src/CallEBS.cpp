@@ -179,6 +179,7 @@ void GetICL(int *Siz, int *Kmax, double* Col, double* Li, double *P, double* ICL
 {
   int K = *Kmax;
   int Size = *Siz;
+  ICL[0]=-Col[0];
   for (int k=1; k<K; k++)
   {
     int* kneeded= new int[1];
