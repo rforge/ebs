@@ -28,15 +28,15 @@ extern "C"
     return;
   }
 
-  void ChooseICL(int *Siz, int *Kmax, double* Col, double* Li, double *P, int* kICL)
+  void ChooseICL(int *Siz, int *Kmax, double* Col, double* Li, double *P, double *ICL, int* kICL)
   {
-    ICL(Siz, Kmax, Col, Li, P, kICL);
+    GetICL(Siz, Kmax, Col, Li, P, ICL, kICL);
     return;
   }
   
-  void ChooseBIC(int *Siz, int *Kmax, double* Col, int* kBIC)
+  void ChooseBIC(int *Siz, int *Kmax, double* Col, double* BIC, int* kBIC)
   {
-    KBIC(Siz, Kmax, Col, kBIC);
+    GetBIC(Siz, Kmax, Col, BIC, kBIC);
     return;
   }
   

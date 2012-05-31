@@ -175,13 +175,10 @@ void Moyenne(int *Siz, double* Data, double* P)
   return;
 }
 
-void ICL(int *Siz, int *Kmax, double* Col, double* Li, double *P, int* kICL)
+void GetICL(int *Siz, int *Kmax, double* Col, double* Li, double *P, double* ICL, int* kICL)
 {
   int K = *Kmax;
   int Size = *Siz;
-  double *ICL=new double[K];
-  for (int k=0; k<K; k++)
-	ICL[k]=0;
   for (int k=1; k<K; k++)
   {
     int* kneeded= new int[1];
@@ -210,27 +207,19 @@ void ICL(int *Siz, int *Kmax, double* Col, double* Li, double *P, int* kICL)
 	kchoose = k+1;
     }
   kICL[0] = kchoose;
-  delete[] ICL;
   return;
 }
 
-void ComputeBIC(int *Siz, int *Kmax, double* Col, double* BIC)
+
+void PosteriorK(int *Siz, int *Kmax, double* Col, double* PostK)
 {
   int K = *Kmax;
   int Size = *Siz;
   for (int k=0; k<K; k++)
   {
-    //BIC[k] = -Col[k*Size+Size-1];
-    BIC[k] = -Col[k*Size];
-    BIC[k] += Norma(0,Size-1,k+1);
+    PostK[k] = -Col[k*Size];
+    PostK[k] += Norma(0,Size-1,k+1);
   }
-  return;
-}
-
-void PosteriorK(int *Siz, int *Kmax, double* Col, double* PostK)
-{
-  int K = *Kmax;
-  ComputeBIC(Siz, Kmax, Col, PostK);
   double Total = 0;
   double Max = PostK[0];
   for (int i = 0; i < K; i++)
@@ -245,23 +234,24 @@ void PosteriorK(int *Siz, int *Kmax, double* Col, double* PostK)
   return;
 }
 
-void KBIC(int *Siz, int *Kmax, double* Col, int* kBIC)
+void GetBIC(int *Siz, int *Kmax, double* Col, double* BIC, int* kBIC)
 {
   int K = *Kmax;
-  double* nBIC = new double[K];
-  for (int i=0; i<K; i++)
-    nBIC[i]=0;
-  ComputeBIC(Siz, Kmax, Col, nBIC);
+  int Size = *Siz;
+  for (int k=0; k<K; k++)
+  {
+    BIC[k] = -Col[k*Size];
+    BIC[k] += Norma(0,Size-1,k+1);
+  }
   int kchoose = 0;
   double mi = PLUS_INFINITY;
   for (int k=0; k<K; k++)
-    if (nBIC[k]<mi)
+    if (BIC[k]<mi)
     {
-	  mi = nBIC[k];
+	  mi = BIC[k];
  	  kchoose = k+1;
     }
   kBIC[0] = kchoose;    
-  delete[] nBIC;
   return;
 }
 

@@ -92,10 +92,11 @@ EBSICL.default<-function(x,...)
   n=x$length
   Kmax=x$Kmax
   k=0
+  icl=as.vector(rep(0,Kmax))
 
-  Rep<-.C("ChooseICL",Siz = as.integer(n+1), Kmax=as.integer(Kmax), Col=as.double(DataCol), Li=as.double(DataLi), P = as.double(DataP), kICL = as.integer(k))
+  Rep<-.C("ChooseICL",Siz = as.integer(n+1), Kmax=as.integer(Kmax), Col=as.double(DataCol), Li=as.double(DataLi), P = as.double(DataP), ICL=as.double(icl), kICL = as.integer(k))
 
-  EBSICL.res = Rep$kICL
+  EBSICL.res = list(ICL=Rep$ICL, NbICL=Rep$kICL)
   EBSICL.res
 }
 
@@ -108,10 +109,11 @@ EBSBIC.default<-function(x,...)
   n=x$length
   Kmax=x$Kmax
   k=0
+  bic=as.vector(rep(0,Kmax))
 
-  Rep<-.C("ChooseBIC",Siz = as.integer(n+1), Kmax=as.integer(Kmax), Col=as.double(DataCol), kBIC = as.integer(k))
+  Rep<-.C("ChooseBIC",Siz = as.integer(n+1), Kmax=as.integer(Kmax), Col=as.double(DataCol), BIC = as.double(bic), kBIC = as.integer(k))
 
-  EBSBIC.res = Rep$kBIC
+  EBSBIC.res = list(BIC=Rep$BIC, NbBIC=Rep$kBIC)
   EBSBIC.res
 }
 

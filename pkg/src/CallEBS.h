@@ -10,8 +10,7 @@ void BreakDistrib(int *Siz, int *k, int*Kk, double* Col, double* Li, double* Dis
 void ProbaSegment(int *Siz, int*Kk, double* Col, double* Li, double *P, double* Pseg);
 void GroupSegment(int *Siz, int*Kk, double* Col, double* Li, double *P, double* Pseg);
 void Moyenne(int *Size, double* Data, double* P);
-void ICL(int *Siz, int *Kmax, double* Col, double* Li, double *P, int* kICL);
-void ComputeBIC(int *Siz, int *Kmax, double* Col, double* BIC);
+void GetICL(int *Siz, int *Kmax, double* Col, double* Li, double *P, double* ICL, int* kICL);
 void PosteriorK(int *Siz, int *Kmax, double* Col, double* BIC);
-void KBIC(int *Siz, int *Kmax, double* Col, int* kBIC);
+void GetBIC(int *Siz, int *Kmax, double* Col, double* BIC, int* kBIC);
 void PostMean(int *Siz, int *Kk, double * Data, double* Col, double* Li, double *P, double *Post);
