@@ -67,7 +67,8 @@ The function returns an object of class \textit{EBS} which contains the prior in
 \begin{verbatim}
 > set.seed(1)
 > require(EBS)
-> x<-c(rpois(125,1),rpois(100,5),rpois(50,1),rpois(75,5),rpois(50,1))
+> x<-c(rpois(125,1),rpois(100,5),rpois(50,1),
+  rpois(75,5),rpois(50,1))
 > out <- EBSegmentation(x,Kmax=20)
 \end{verbatim}
 
@@ -106,13 +107,23 @@ Considering the segmentation as an unobserved variable, we can use the ICL crite
 the entropy $\mathcal{H}(K)$ (computed in a quadratic time) can be viewed as a penalty term. 
  Even though in this context the Bayesian Information Criterion is exact, it overestimates the number of segments while the ICL performs better \citep{rigaill_exact_2011}. However, the computation of the BIC (through function \texttt{EBSPostK}) can be usefull for later analysis such as Bayesian Model Averaging (BMA).
 \begin{verbatim}
-> Kicl <- EBSICL(out)
-> Kicl
+> bic <- EBSBIC(out)
+> print(bic$NbBIC)
+[1] 9
+> icl <- EBSICL(out)
+> print(icl$NbICL)
 [1] 5
-> Kbic<-EBSBIC(out)
-> Kbic
-[1] 7
+
 \end{verbatim}
+
+figure \ref{fig:01} plots the value of the BIC and ICL depending on K. 
+
+\begin{figure}[!h]%figure1
+\centerline{\includegraphics[width=6cm]{icl-bic.pdf}}
+\caption{BIC and ICL criteria as a function of the number of segments} \label{fig:01}
+\end{figure}
+
+
 
 
 
@@ -125,11 +136,11 @@ Once the number of segments is chosen, one might be interested in the distributi
   file="my-segmentation.pdf")
 \end{verbatim}
 
-Figure \ref{fig:01} shows the output. 
+Figure \ref{fig:02} shows the output. 
 
 \begin{figure}[!h]%figure1
-\centerline{\includegraphics[width=8cm]{my-segmentation.pdf}}
-\caption{file \textit{my-segmentation.pdf}, output of function \texttt{EBSPlotProba}}\label{fig:01}
+\centerline{\includegraphics[width=6cm]{my-segmentation.pdf}}
+\caption{file \textit{my-segmentation.pdf}, output of function \texttt{EBSPlotProba}}\label{fig:02}
 \end{figure}
 
 \end{methods}
