@@ -39,24 +39,11 @@ Among the few are the implementation of Bardy and Hartigan's Bayesian approach (
 EBS is an implementation of the framework described in \cite{rigaill_exact_2011} which derives \textbf{exact} posterior probabilities of quantities such as the number of segments, the entropy of a segmentation, or the localisation of the change-points.
 
 
-
-\section{Approach}
-
-Our approach is valid for all models satisfying the factoriability assumption: if $Y$ denotes the data, $m$ a segmentation and $r$ a segment of $m$, 
-\begin{equation}
- (H)\quad P(Y,m) = C \prod_{r\in m} a_r P(Y^r|r) \label{factoriability}
-\end{equation}
-where $P(Y^r|r) =\int P(Y^r|\theta_r)P(\theta_r)d\theta_r $. The package includes the Poisson, Normal Heteroscedastic and Negative Binomial (with known overdispersion parameter) models that all verify $(H)$.
-
-The computation of the quantities of interest all rely on $P(Y,K)$ (K being the number of segments) that can be computed in quadratic time as
-\begin{equation}
- P(Y,K) = \left[{n-1} \choose{K-1} \right]^{-1} \left(A^K \right)_{1,n+1} \label{Proba}
-\end{equation} 
-where $A_{i,j}=P(Y^{[\![i,j[\![})$. (See Proposition 2.2 of \cite{rigaill_exact_2011} for proof).
-
 \begin{methods}
 
 \section{Available Functionality}
+
+The package has been developped for the analysis of biological data. For this matter, the Normal Heteroscedastic model, relevant for CGH-arrays, and the Poisson and Negative Binomial (with known overdispersion parameter) models, relevant for NGS-data have been implemented. 
 
 Table \ref{Tab:01} gives the list of the functions available in the EBS Package. This section describes and illustrates their use with a continued example. 
 
@@ -121,7 +108,7 @@ the entropy $\mathcal{H}(K)$ (computed in a quadratic time) can be viewed as a p
 figure \ref{fig:01} plots the value of the BIC and ICL depending on K. 
 
 \begin{figure}[!h]%figure1
-\centerline{\includegraphics[width=6cm]{icl-bic.pdf}}
+\centerline{\includegraphics[width=4.5cm]{icl-bic.pdf}}
 \caption{BIC and ICL criteria as a function of the number of segments} \label{fig:01}
 \end{figure}
 
