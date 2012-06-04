@@ -32,9 +32,11 @@ EBS is available as an R package from CRAN repositories (e.g. http://cran.r-proj
 
 \section{Introduction}
 
-Change-point detection strategies include exact methods such as the Dynamic Programming Algorithm \citep{bellman_approximation_1961}, or fast and efficient heuristic such as Binary Segmentation \citep{breiman_cart}, but most do not address crucial questions like the quality of the segmentation or the uncertainty on the localisation of breakpoints. Those quantities could however be usefull when choosing the number of segments, or comparing the segmentation of different profiles. 
+ Most change-point detection strategies do not address crucial questions like the quality of the segmentation or the uncertainty on the localisation of breakpoints that are useful when choosing the number of segments, or comparing the segmentation of different profiles. 
 
-Recently, \cite{Luong_HMM_2012} proposed a method to estimate the posterior distribution of a breakpoint using a constrained HMM model. However, it relies on the input of segment parameters, thus does not explore the entire segmentation space. EBS is an implementation of the framework described in \cite{rigaill_exact_2011} which derives exact posterior probabilities of quantities such as the number of segments, the entropy of a segmentation, or the localisation of the change-points.
+Among the few are the implementation of Bardy and Hartigan's Bayesian approach (bcp) that uses MCMC approximation, \citep{barry_hartigan, bcp_package}, and the frequentist forward-backward algorithm of \cite{guedon_2008} and constrained-HMM framework of  \cite{Luong_HMM_2012}. Those two later approaches compute those useful quantities for fixed values of the segment parameters.
+
+EBS is an implementation of the framework described in \cite{rigaill_exact_2011} which derives \textbf{exact} posterior probabilities of quantities such as the number of segments, the entropy of a segmentation, or the localisation of the change-points.
 
 
 
@@ -78,8 +80,8 @@ The function returns an object of class \textit{EBS} which contains the prior in
 {\begin{tabular}{ll}\toprule
 Function Name & Output \\\midrule
  EBSegmentation & Initializes matrix $A$ and its $K_{max}$ first powers\\
- EBSBIC & Chooses optimal value of K with BIC criterion\\
- EBSICL & Chooses optimal value of K with ICL criterion\\ 
+ EBSBIC & Computes BIC and chooses optimal value of K \\
+ EBSICL & Computes ICL and chooses optimal value of K \\
  EBSPostK & Returns the posterior probability of the number of segments\\
  EBSDistrib & Computes the distribution of a change-point\\
  EBSPlotProba & Plots distribution of all change-points for a given K\\\botrule
@@ -184,11 +186,14 @@ We whish to thank Gregory Nuel and Michel Koskas for their help dealing with num
 
 \begin{thebibliography}{}
 
-\bibitem[Bellman, 1961]{bellman_approximation_1961} Richard Bellman (1961) On the approximation of curves by line segments using dynamic programming,  {\it Commun. {ACM}}, {\bf 4}, 284.
+\bibitem[Barry and Hartigan, 1993]{barry_hartigan} Barry, D., and Hartigan, J. A. (1993) A Bayesian Analysis for Change Point Problems {\it Journal of the American Statistical Association}, {\bf 88} 309-319
 
 \bibitem[Biernacki {\it et~al}., 2000]{biernacki_assessingmixture_2000} Biernacki, C., Celeux, G. and Govaert, G. (2000) Assessing a mixture model for clustering with the integrated completed likelihood, {\it{IEEE} Transactions on Pattern Analysis and Machine Intelligence}, {\bf 22} 719-725.
 
-\bibitem[Breiman, 1984]{breiman_cart} Breiman, Friedman, Olshen and Stone (1984) Classification and Regression Trees, {\it Wadsworth and Brooks}.
+\bibitem[Erdman and Emerson, 2007]{bcp_package}   Chandra Erdman and John W. Emerson (2007) {\bf{bcp}}: An {R} Package for Performing a Bayesian Analysis
+      of Change Point Problems {\it Journal of Statistical Software}, {\bf 3} 1-13
+
+\bibitem[Guedon, 2008]{guedon_2008} Guédon, Y. (2008) Explorating the segmentation space for the assessment of multiple change-points models. {\it Technical report, Preprint INRIA} {\bf 6619}
 
 \bibitem[Luong {\it et~al}, 2012]{Luong_HMM_2012} Luong, T.~M., Rozenholc, Y. and Nuel, G. (2012) Fast estimation of posterior probabilities in change-point models through a constrained hidden Markov model {http://adsabs.harvard.edu/abs/2012arXiv1203.4394L}.
 
