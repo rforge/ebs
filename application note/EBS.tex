@@ -38,16 +38,41 @@ Among the few are the implementation of Bardy and Hartigan's Bayesian approach (
 
 EBS is an implementation of the framework described in \cite{rigaill_exact_2011} which derives \textbf{exact} posterior probabilities of quantities such as the number of segments, the entropy of a segmentation, or the localisation of the change-points.
 
-
+The general change-point detection model can be stated as
+  follows. Consider data ordered along genomic positions (or probe
+  location) $Y = (Y_1, Y_2, \dots Y_n)$. The whole chromosome is
+  shattered into successive segments $r$. The observations come from
+  some parametric distribution $F$. The parameter depends on the
+  segment the observation belongs to: $i \in r \: \Rightarrow \: Y_i
+  \sim F(\theta^r)$.
 \begin{methods}
 
 \section{Available Functionality}
+Our approach is valid for all models satisfying the factoriability
+assumption: if $Y$ denotes the data, $m$ a segmentation and $r$ a
+segment of $m$,
+\begin{equation}
+ (H)\quad P(Y,m) = C \prod_{r\in m} a_r P(Y^r|r) \label{factoriability}
+\end{equation}
+where $P(Y^r|r) =\int P(Y^r|\theta_r)P(\theta_r)d\theta_r $.
 
-The package has been developped for the analysis of biological data. For this matter, the Normal Heteroscedastic model, relevant for CGH-arrays, and the Poisson and Negative Binomial (with known overdispersion parameter) models, relevant for NGS-data have been implemented. 
+The
+package includes the Poisson, Normal Heteroscedastic and Negative
+Binomial (with known overdispersion parameter) models that all verify
+$(H)$. Normal distribution are dedicated to arrayCGH, whereas Poisson and negative binomial are proposed for NGS.
+
+The computation of the quantities of interest all rely on $P(Y,K)$
+($K$ being the number of segments) that can be computed in quadratic
+time as
+\begin{equation}
+ P(Y,K) = \left[{n-1} \choose{K-1} \right]^{-1} \left(A^K \right)_{1,n+1} \label{Proba}
+\end{equation} 
+where $A_{i,j}=P(Y^r)$ where $r$ stands for the segment $[\![i,j[\![$. (See Proposition 2.2 of \cite{rigaill_exact_2011} for proof).
+
 
 Table \ref{Tab:01} gives the list of the functions available in the EBS Package. This section describes and illustrates their use with a continued example. 
 
-\subsection{Initialization}
+\subsection{Matrix Construction}
 
 All quantities of interest can be computed using simple operations on the elements of the matrix $A$ of segment probabilities. The function \texttt{EBSegmentation} initializes this matrix with the data according to the user's choice of maximum number of segments and data-model. Each of them is associated with a prior distribution on the parameters (for instance, Gamma for the Poisson model), and the result depends on the value of the hyperparameters. By default \texttt{EBSegmentation} uses values such that the prior is non-informative, but the user has the possibility of giving his own hyperparameters.
 
@@ -105,7 +130,6 @@ the entropy $\mathcal{H}(K)$ (computed in a quadratic time) can be viewed as a p
 
 \end{verbatim}
 
-figure \ref{fig:01} plots the value of the BIC and ICL depending on K. 
 
 \begin{figure}[!h]%figure1
 \centerline{\includegraphics[width=4.5cm]{icl-bic.pdf}}
@@ -131,19 +155,6 @@ Figure \ref{fig:02} shows the output.
 \centerline{\includegraphics[width=6cm]{my-segmentation.pdf}}
 \caption{file \textit{my-segmentation.pdf}, output of function \texttt{EBSPlotProba}}\label{fig:02}
 \end{figure}
-
-\end{methods}
-
-
-
-\section{Implementation}
-
-The preprocessing of the input data is handled by the R language,
-giving the user easier access to a large amount of data. The model fitting, computation of probabilities 
-and other time consuming operations are implemented in a versatile C++ code, and dynamically loaded into R.
-Several methods are available for further analysis of the results. The package
-offers various diagnostic tools and functions for visualization, for
-example, plotting the breakpoint location distributions for a given number of segments.
 
 
 
@@ -187,4 +198,5 @@ We whish to thank Gregory Nuel and Michel Koskas for their help dealing with num
 \bibitem[Rigaill {\it et~al}., 2010]{rigaill_exact_2011} Rigaill, G., Lebarbier, E., Robin, S. (2011) Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems, {\it Statistics and Computing}, {\bf 22-4}, 917-929.
 
 \end{thebibliography}
+\end{methods}
 \end{document}
