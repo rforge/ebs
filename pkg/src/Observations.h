@@ -30,6 +30,7 @@ public:
   Observations();
   Observations(MyVector<T> &v);
   T SumInSegment(int a, int b);
+  T SumSquareInSegment(int a, int b);
   double MeanInSegment(int a, int b);
   double VarInSegment(int a, int b);
   double LogFactorialInSegment(int a, int b);
@@ -57,6 +58,15 @@ T Observations<T>::SumInSegment(int a, int b)
   T S=0;
   for (int i = a; i < b; i++)
     		S += y[i];
+  return S;
+}
+
+template<typename T>
+T Observations<T>::SumSquareInSegment(int a, int b)
+{
+  T S=0;
+  for (int i = a; i < b; i++)
+    		S += y[i]*y[i];
   return S;
 }
 

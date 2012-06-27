@@ -22,6 +22,12 @@ extern "C"
     return;
   }
 
+  void SegmentGaussienneHomo(int *Size, int *KMax, double* hyper, double *Var, int* Data, double* Col, double* Li, double* P)
+  {
+    CallEBSGaussienneHomo(Size, KMax, hyper, Var, Data, Col, Li, P);
+    return;
+  }
+
   void Distribution(int *Siz, int *kk, int*KK, double* Col, double* Li, double* Dist)
   {
     BreakDistrib(Siz, kk, KK, Col, Li, Dist);

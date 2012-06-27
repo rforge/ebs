@@ -1,0 +1,24 @@
+
+
+#ifndef _LogGaussienneHomo_h_
+#define _LogGaussienneHomo_h_
+
+#include "Function.h"
+#include "Observations.h"
+
+class LogGaussienne : public Function
+{
+public:
+  double mu0;
+  double n0;
+  double var;
+  Observations<double> LesObs;
+  LogGaussienne();
+  LogGaussienne(Observations<double> &MyObs, double v, double mu, double n);
+  double operator()(int, int); // rappel: segment [a,b[
+  LogGaussienne operator=(const LogGaussienne &Other);
+};
+
+
+
+#endif

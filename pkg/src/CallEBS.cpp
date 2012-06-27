@@ -83,6 +83,33 @@ void CallEBSGaussienne(int *Size, int *KMax, double* hyper, int* Data, double* C
     return;
 }
 
+void CallEBSGaussienneHomo(int *Size, int *KMax, double* hyper, double *Var, int* Data, double* Col, double* Li, double* P)
+{
+    int K= *KMax;
+    int n = *Size;
+    double v = Var[0];
+    double Hyper1 = hyper[0];
+    double Hyper2 = hyper[1];
+    MyVector<double> MyData(n,0);
+    for (int i=0; i<n; i++)
+	MyData[i] = Data[i];
+    Observations<double> LesObservations(MyData);
+    LogGaussienne G(LesObservations, v, Hyper1, Hyper2);
+    Distributions<LogGaussienne> Dis(n+1, K, &G);
+    for (int k=0; k<K; k++)
+	for (int i=0; i<(n+1); i++)
+	{
+	  Li[k*(n+1)+i]=Dis.GetDataLi()[k][i];
+	  Col[k*(n+1)+i]=Dis.GetDataCol()[i][k];
+	}
+
+    for (int i=0; i<(n+1); i++)
+	for (int j=0; j<(n+1); j++)
+	  P[i*(n+1)+j]=Dis.P.Data[i][j];
+
+    return;
+}
+
 void BreakDistrib(int *Siz, int *kk, int*KK, double* Col, double* Li, double* Dist)
 {
     int k = *kk;
