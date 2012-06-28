@@ -55,7 +55,8 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
      me<-median(data)
      int<-abs(data-me)
      OK<-which(int!=0)
-     y<-fitdistr(int[OK],"gamma")
+     inverse<-1/int[OK]
+     y<-fitdistr(inverse,"gamma")
 
   }
 
