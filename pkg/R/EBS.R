@@ -54,21 +54,17 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
   {
      me<-median(data)
      int<-abs(data-me)
-     y<-fitdistr(int,"gamma")
+     OK<-which(int!=0)
+     y<-fitdistr(int[OK],"gamma")
 
   }
 
   if(prior=='default')
     if(model==1)
 	hyper=c(1,0) else if(model==3)
-	hyper=c(1,1) else if(model==2)
+	hyper=c(1/2,1/2) else if(model==2)
 	hyper=c(1,1) else
-	hyper=c(2,0,2,1)
-  if(prior=='Jeffreys')
-    if(model==1)
-	hyper=c(1/2,0) else if(model==3)
-	hyper=c(1/2,1/2) else
-	hyper=c(1/2,1,1/2,0.001)
+	hyper=c(2*y$estimate[1],0,2/y$estimate[2],1)
   
   hyper=as.vector(hyper)
 
