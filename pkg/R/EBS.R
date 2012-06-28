@@ -1,26 +1,83 @@
-EBSegmentation <- function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta=0.15, uniform=TRUE) UseMethod("EBSegmentation")
+EBSegmentation <- function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta=0, var=0, prior='default') UseMethod("EBSegmentation")
 
-EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta=0.15, uniform=TRUE)
+EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta=0, var = 0, prior='uniform')
 {
-  if ((model!=1)&(model!=2)&(model!=3))
-    stop("Choose model=1 (Poisson), 2 (normal) or 3 (Negative Binomial)")
+  if ((model!=1)&(model!=2)&(model!=3)&(model!=4))
+    stop("Choose model=1 (Poisson), 2 (Normal Homoscedastic), 3 (Negative Binomial) or 4 (Normal Heteroscedastic)")
   if (length(data)==0)
     stop("Give me a vector of data to segment")
+  n=length(data)
 
-  if(uniform)
+  if ((model==2)&(var==0))
+  {
+     data1<-data[-(1:3)]
+     data2<-data[-c(1,2,length(data))]
+     data3<-data[-c(1,length(data)-1,length(data))]
+     data4<-data[-((length(data)-2):length(data))]
+     d<-c(0.1942, 0.2809, 0.3832, -0.8582)
+     v2<-d[1]*data1+d[2]*data2+d[3]*data3+d[4]*data4
+     v2<-v2*v2
+     var<-sum(v2)/(length(data)-3)
+  }
+  
+  if ((model==3)&(theta==0))
+  {
+    i<-1
+    pold<-0
+    while (i<length(data))
+    {
+      pnew=0
+      while((i<length(X)) & (X[i]!=0)) i<-i+1
+      while((i<length(X)) & (X[i]==0) )
+      { 
+        pnew=pnew+1
+        i<-i+1
+      }
+      if(pnew>pold)
+      {
+        pold=pnew
+      }  
+    }
+    h<-2*pold
+	Xcum = cumsum(data)
+	X2cum = cumsum(data^2)
+	M = (Xcum[h:n] - c(0, Xcum[1:(n-h)])) / h
+	S2 = (X2cum[h:n] - c(0, X2cum[1:(n-h)])) / (h-1) - h/(h-1)*M^2
+	P = (S2/M) - 1
+	K = M^2 / (S2-M)
+	W = h*(P/(1+P))^2
+	W = W / sum(W)
+    theta = median(K)
+  }
+
+  if (model==4)
+  {
+     me<-median(data)
+     int<-abs(data-me)
+     y<-fitdistr(int,"gamma")
+
+  }
+
+  if(prior=='default')
     if(model==1)
-	hyper=c(2,2) else if(model==3)
+	hyper=c(1,0) else if(model==3)
+	hyper=c(1,1) else if(model==2)
 	hyper=c(1,1) else
 	hyper=c(2,0,2,1)
+  if(prior=='Jeffreys')
+    if(model==1)
+	hyper=c(1/2,0) else if(model==3)
+	hyper=c(1/2,1/2) else
+	hyper=c(1/2,1,1/2,0.001)
   
   hyper=as.vector(hyper)
 
-  if (((model==1)|(model==3)) & (length(hyper)!=2))
-    stop("for Poisson or Negative Binomial models two hyper-parameters are needed")
-  if ((model==2) & (length(hyper)!=4))
-    stop("for Normal model four hyper-parameters are needed")
+  if (((model==1)|(model==2)|(model==3)) & (length(hyper)!=2))
+    stop("for Poisson, Normal Homoscedastic and Negative Binomial models, two hyper-parameters are needed")
+  if ((model==4) & (length(hyper)!=4))
+    stop("for Normal Heteroscedastic model four hyper-parameters are needed")
 
-  n=length(data)
+
   Li=matrix(0,nrow=Kmax,ncol=(n+1))
   Li = as.vector(Li)
   Col=matrix(0,ncol=Kmax,nrow=(n+1))
