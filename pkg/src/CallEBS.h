@@ -4,8 +4,8 @@
 
 void CallEBSPoisson(int *Size, int *KMax, double* hyper, int* Data, double* Col, double* Li, double* P);
 void CallEBSBinNeg(int *Size, int *KMax, double* hyper, double* theta, int* Data, double* Col, double* Li, double* P);
-void CallEBSGaussienne(int *Size, int *KMax, double* hyper, int* Data, double* Col, double* Li, double* P);
-void CallEBSGaussienneHomo(int *Size, int *KMax, double* hyper, double *Var, int* Data, double* Col, double* Li, double* P);
+void CallEBSGaussienne(int *Size, int *KMax, double* hyper, double* Data, double* Col, double* Li, double* P);
+void CallEBSGaussienneHomo(int *Size, int *KMax, double* hyper, double *Var, double* Data, double* Col, double* Li, double* P);
 
 void BreakDistrib(int *Siz, int *k, int*Kk, double* Col, double* Li, double* Dist);
 void ProbaSegment(int *Siz, int*Kk, double* Col, double* Li, double *P, double* Pseg);

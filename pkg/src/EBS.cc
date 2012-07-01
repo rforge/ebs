@@ -16,13 +16,13 @@ extern "C"
     return;
   }
 
-  void SegmentGaussienne(int *Size, int *KMax, double* hyper, int* Data, double* Col, double* Li, double* P)
+  void SegmentGaussienne(int *Size, int *KMax, double* hyper, double* Data, double* Col, double* Li, double* P)
   {
     CallEBSGaussienne(Size, KMax, hyper, Data, Col, Li, P);
     return;
   }
 
-  void SegmentGaussienneHomo(int *Size, int *KMax, double* hyper, double *Var, int* Data, double* Col, double* Li, double* P)
+  void SegmentGaussienneHomo(int *Size, int *KMax, double* hyper, double *Var, double* Data, double* Col, double* Li, double* P)
   {
     CallEBSGaussienneHomo(Size, KMax, hyper, Var, Data, Col, Li, P);
     return;

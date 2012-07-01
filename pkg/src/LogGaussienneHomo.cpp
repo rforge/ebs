@@ -5,14 +5,14 @@
 #include <assert.h>
 #include <iostream>
 
-LogGaussienne::LogGaussienneHomo()
+LogGaussienneHomo::LogGaussienneHomo()
 {
   mu0 = 0;
   n0 = 0;
   var = 1;
 }
 
-LogGaussienne::LogGaussienneHomo(Observations<double> &MyObs, double v, double mu, double nn)
+LogGaussienneHomo::LogGaussienneHomo(Observations<double> &MyObs, double v, double mu, double nn)
 {
   var = v;
   mu0 = mu;
@@ -38,7 +38,7 @@ LogGaussienneHomo LogGaussienneHomo::operator=(const LogGaussienneHomo &Other)
 {
   if (this != &Other)
     {
-      va = Other.var;
+      var = Other.var;
       mu0 = Other.mu0;
       n0 = Other.n0;
       LesObs = Other.LesObs;

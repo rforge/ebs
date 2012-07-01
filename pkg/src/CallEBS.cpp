@@ -2,6 +2,7 @@
 #include "LogPoisson.h"
 #include "LogBinNeg.h"
 #include "LogGaussienne.h"
+#include "LogGaussienneHomo.h"
 
 void CallEBSPoisson(int *Size, int *KMax, double* hyper, int* Data, double* Col, double* Li, double* P)
 {
@@ -55,7 +56,7 @@ void CallEBSBinNeg(int *Size, int *KMax, double* hyper, double* theta, int* Data
     return;
 }
 
-void CallEBSGaussienne(int *Size, int *KMax, double* hyper, int* Data, double* Col, double* Li, double* P)
+void CallEBSGaussienne(int *Size, int *KMax, double* hyper, double* Data, double* Col, double* Li, double* P)
 {
     int K= *KMax;
     int n = *Size;
@@ -83,7 +84,7 @@ void CallEBSGaussienne(int *Size, int *KMax, double* hyper, int* Data, double* C
     return;
 }
 
-void CallEBSGaussienneHomo(int *Size, int *KMax, double* hyper, double *Var, int* Data, double* Col, double* Li, double* P)
+void CallEBSGaussienneHomo(int *Size, int *KMax, double* hyper, double *Var, double* Data, double* Col, double* Li, double* P)
 {
     int K= *KMax;
     int n = *Size;
@@ -94,8 +95,8 @@ void CallEBSGaussienneHomo(int *Size, int *KMax, double* hyper, double *Var, int
     for (int i=0; i<n; i++)
 	MyData[i] = Data[i];
     Observations<double> LesObservations(MyData);
-    LogGaussienne G(LesObservations, v, Hyper1, Hyper2);
-    Distributions<LogGaussienne> Dis(n+1, K, &G);
+    LogGaussienneHomo G(LesObservations, v, Hyper1, Hyper2);
+    Distributions<LogGaussienneHomo> Dis(n+1, K, &G);
     for (int k=0; k<K; k++)
 	for (int i=0; i<(n+1); i++)
 	{

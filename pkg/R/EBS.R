@@ -1,6 +1,6 @@
 EBSegmentation <- function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta=0, var=0, prior='default') UseMethod("EBSegmentation")
 
-EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta=0, var = 0, prior='uniform')
+EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta=0, var = 0, prior='default')
 {
   if ((model!=1)&(model!=2)&(model!=3)&(model!=4))
     stop("Choose model=1 (Poisson), 2 (Normal Homoscedastic), 3 (Negative Binomial) or 4 (Normal Heteroscedastic)")
@@ -24,11 +24,11 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
   {
     i<-1
     pold<-0
-    while (i<length(data))
+    while (i<n)
     {
       pnew=0
-      while((i<length(X)) & (X[i]!=0)) i<-i+1
-      while((i<length(X)) & (X[i]==0) )
+      while((i<n) & (data[i]!=0)) i<-i+1
+      while((i<n) & (data[i]==0) )
       { 
         pnew=pnew+1
         i<-i+1
@@ -38,7 +38,7 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
         pold=pnew
       }  
     }
-    h<-2*pold
+    h<-max(2*pold,15)
 	Xcum = cumsum(data)
 	X2cum = cumsum(data^2)
 	M = (Xcum[h:n] - c(0, Xcum[1:(n-h)])) / h
@@ -60,12 +60,12 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
 
   }
 
-  if(prior=='default')
+  if((prior=='default')&(length(hyper)==0))
     if(model==1)
 	hyper=c(1,0) else if(model==3)
 	hyper=c(1/2,1/2) else if(model==2)
 	hyper=c(1,1) else
-	hyper=c(2*y$estimate[1],0,2/y$estimate[2],1)
+	hyper=c(2*y$estimate[1],0,2*y$estimate[2],1)
   
   hyper=as.vector(hyper)
 
@@ -85,7 +85,8 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
   if (model==1)
     Rep<-.C("SegmentPoisson", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), Data = as.integer(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS") else if (model==3)
     Rep<-.C("SegmentBinNeg", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), theta = as.double(theta), Data = as.integer(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS") else if (model==2)
-    Rep<-.C("SegmentGaussienne", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), Data = as.integer(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS")
+    Rep<-.C("SegmentGaussienneHomo", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), Data = as.double(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS") else if (model==4)
+    Rep<-.C("SegmentGaussienne", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), Var = as.double(var), Data = as.double(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS")
 
   resLi=matrix(Rep$Li,ncol=Kmax)
   resLi<-t(resLi)
@@ -106,7 +107,13 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
 
   if (model==2) 
   {
-      model.dist="Normal"
+      model.dist="Normal Homoscedastic"
+      EBSegmentation.res=list(model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, Variance = var, Li=resLi, Col=resCol, matProba = resP)
+  }
+
+  if (model==4) 
+  {
+      model.dist="Normal Heteroscedastic"
       EBSegmentation.res=list(model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, Li=resLi, Col=resCol, matProba = resP)
   }
 
@@ -354,6 +361,15 @@ print.EBS <- function(x,...)
     cat("\n beta= ") 
     print(beta)
     cat(" \n") 
+  } else if (x$model=="Normal Homoscedastic")
+  {
+    mu = x$HyperParameters[1]
+    sig = x$HyperParameters[2]
+    cat("Normal(mu, sigma^2): \n mu= ") 
+    print(mu[1])
+    cat("\n sigma^2= ") 
+    print(sig)
+    cat(" \n") 
   } else 
   {
     cat("for inverse of variance: Gamma(alpha, beta): \n 2 *alpha = ") 
@@ -370,6 +386,11 @@ print.EBS <- function(x,...)
   {
     cat("\n used value for inverse of overdispersion \n")
     print(x$overdispersion)
+  }  
+  if(x$model=="Normal Homoscedastic")
+  {
+    cat("\n used value for variance\n")
+    print(x$Variance)
   }  
   cat("\n Log-proba [1,i[ in j segments: ($Li)")
   str(x$Li)
