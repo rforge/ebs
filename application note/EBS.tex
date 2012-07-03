@@ -20,7 +20,9 @@ $^{2}$Department of XXXXXXXX, Address XXXX etc.}
 \begin{abstract}
 
 \section{Summary:}
- Numerous methods have been proposed to find the optimal partition of a signal in a given number of segments, but very few address the question of the quality of the segmentation. In many biological data-sets (CGH-array, NGS, ...),  each segment is assumed to be related to a biological event so that the certainty of their location and the number of segments is crucial. EBS is an R package that provides through a Bayesian framework exact quantities such as the posterior distribution of a change-point position, and an efficient ICL criterion for the selection of the total number of change-points. All quantities are computed in a quadratic time.
+ Numerous methods have been proposed to find the optimal partition of a signal in a given number of segments, but very few address the question of the quality of the segmentation. In many biological data-sets (CGH-array, NGS, ...),  each segment is assumed to be related to a biological event. Thus it is crucial to have precise idea of the uncertainty on the number and position of the segments.
+%so that the certainty of their location and the number of segments is crucial. 
+EBS is an R package that provides through a Bayesian framework exact quantities such as the posterior distribution of a change-point position, and an efficient ICL criterion for the selection of the total number of change-points. All quantities are computed in a quadratic time.
 
 
 \section{Availability:}
@@ -48,7 +50,7 @@ The general change-point detection model can be stated as
 \begin{methods}
 
 \section{Available Functionality}
-Our approach is valid for all models satisfying the factoriability
+Our approach is valid for all models satisfying the following factoriability
 assumption: if $Y$ denotes the data, $m$ a segmentation and $r$ a
 segment of $m$,
 \begin{equation}
@@ -61,7 +63,7 @@ package includes the Poisson, Normal Heteroscedastic and Negative
 Binomial (with known overdispersion parameter) models that all verify
 $(H)$. Normal distribution are dedicated to arrayCGH, whereas Poisson and negative binomial are proposed for NGS.
 
-The computation of the quantities of interest all rely on $P(Y,K)$
+The computation of the quantities of interest rely on the knowledge of $P(Y,K)$
 ($K$ being the number of segments) that can be computed in quadratic
 time as
 \begin{equation}
@@ -76,7 +78,9 @@ Table \ref{Tab:01} gives the list of the functions available in the EBS Package.
 
 All quantities of interest can be computed using simple operations on the elements of the matrix $A$ of segment probabilities. The function \texttt{EBSegmentation} initializes this matrix with the data according to the user's choice of maximum number of segments and data-model. Each of them is associated with a prior distribution on the parameters (for instance, Gamma for the Poisson model), and the result depends on the value of the hyperparameters. By default \texttt{EBSegmentation} uses values such that the prior is non-informative, but the user has the possibility of giving his own hyperparameters.
 
-The function returns an object of class \textit{EBS} which contains the prior information, matrix $A$ and the two following matrices: $Li$ and $Col$ are matrices which $k^{th}$ row (respectively column) is the first row (resp last column) of the $k^{th}$ power of $A$ ($1\leq k \leq K_{max}$). Thus $Li_{i,j}=P([\![Y_0,Y_j[\![,i)$ and $Col_{i,j}=P([\![Y_i,Y_{n+1}[\![,j)$.
+The function returns an object of class \textit{EBS} which contains the prior information, matrix $A$ and the two matrices $Li$ and $Col$
+ which $k^{th}$ row (respectively column) is the first row (resp last column) of the $k^{th}$ power of $A$ ($1\leq k \leq K_{max}$). 
+In other words we have: $Li_{i,j}=P([\![Y_0,Y_j[\![,i)$ and $Col_{i,j}=P([\![Y_i,Y_{n+1}[\![,j)$.
 
 \begin{verbatim}
 > set.seed(1)
@@ -114,11 +118,13 @@ EBS Package provides two model selection criteria:
 
 These criteria can be called with functions \texttt{EBSBIC} and \texttt{EBSICL}. 
 
-Considering the segmentation as an unobserved variable, we can use the ICL criterion introduced by \cite{biernacki_assessingmixture_2000} in the context of incomplete data models to select the number of segments. Written as $ICL(K) = -\log P(Y,K) + \mathcal{H}(K) \label{ICL}$ where 
+Considering the segmentation as an unobserved variable, we can use the ICL criterion introduced by \cite{biernacki_assessingmixture_2000} in the context of incomplete data models to select the number of segments. 
+The ICL can be written as $ICL(K) = -\log P(Y,K) + \mathcal{H}(K) \label{ICL}$ where
+the entropy $\mathcal{H}(K)$ is defined as :
 \begin{equation}
   \mathcal{H}(K)=-\log \sum_{m\in \mathcal{M}_K} p(m|Y,K) \log p(m|Y,K)
 \end{equation}
-the entropy $\mathcal{H}(K)$ (computed in a quadratic time) can be viewed as a penalty term. 
+The entropy can be viewed as a penalty term and it is computed in a quadratic time. 
  Even though in this context the Bayesian Information Criterion is exact, it overestimates the number of segments while the ICL performs better \citep{rigaill_exact_2011}. However, the computation of the BIC (through function \texttt{EBSPostK}) can be usefull for later analysis such as Bayesian Model Averaging (BMA).
 \begin{verbatim}
 > bic <- EBSBIC(out)
