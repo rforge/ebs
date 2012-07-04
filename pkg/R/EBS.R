@@ -19,6 +19,33 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
      v2<-v2*v2
      var<-sum(v2)/(length(data)-3)
   }
+
+  if ((model==1)&(length(hyper)==0))
+  {
+    i<-1
+    pold<-0
+    while (i<n)
+    {
+      pnew=0
+      while((i<n) & (data[i]!=0)) i<-i+1
+      while((i<n) & (data[i]==0) )
+      { 
+        pnew=pnew+1
+        i<-i+1
+      }
+      if(pnew>pold)
+      {
+        pold=pnew
+      }  
+    }
+    h<-max(pold+1,4)
+    v2<-NULL
+    for (i in 1:(n-h+1))
+    {
+	v2<-c(v2,mean(data[i:(i+h-1)]))
+    }
+     ypois<-fitdistr(v2,"gamma")
+  }
   
   if ((model==3)&(theta==0))
   {
@@ -50,7 +77,7 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
     theta = median(K)
   }
 
-  if (model==4)
+  if ((model==4) & (length(hyper)==0))
   {
      me<-median(data)
      int<-abs(data-me)
@@ -61,11 +88,13 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
   }
 
   if((prior=='default')&(length(hyper)==0))
+  {
     if(model==1)
-	hyper=c(1,0) else if(model==3)
+	hyper=c(ypois$estimate[1],1/ypois$estimate[2]) else if(model==3)
 	hyper=c(1/2,1/2) else if(model==2)
-	hyper=c(1,1) else
-	hyper=c(2*y$estimate[1],0,2*y$estimate[2],1)
+	hyper=c(0,1) else
+	hyper=c(y$estimate[1],0,y$estimate[2],1)
+  }
   
   hyper=as.vector(hyper)
 
@@ -85,8 +114,8 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
   if (model==1)
     Rep<-.C("SegmentPoisson", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), Data = as.integer(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS") else if (model==3)
     Rep<-.C("SegmentBinNeg", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), theta = as.double(theta), Data = as.integer(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS") else if (model==2)
-    Rep<-.C("SegmentGaussienneHomo", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), Data = as.double(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS") else if (model==4)
-    Rep<-.C("SegmentGaussienne", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), Var = as.double(var), Data = as.double(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS")
+    Rep<-.C("SegmentGaussienneHomo", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), Var = as.double(var), Data = as.double(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS") else if (model==4)
+    Rep<-.C("SegmentGaussienne", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), Data = as.double(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS")
 
   resLi=matrix(Rep$Li,ncol=Kmax)
   resLi<-t(resLi)
