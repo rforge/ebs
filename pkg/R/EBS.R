@@ -1,6 +1,6 @@
-EBSegmentation <- function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta=0, var=0, prior='default') UseMethod("EBSegmentation")
+EBSegmentation <- function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta=0, var=0) UseMethod("EBSegmentation")
 
-EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta=0, var = 0, prior='default')
+EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta=0, var = 0)
 {
   if ((model!=1)&(model!=2)&(model!=3)&(model!=4))
     stop("Choose model=1 (Poisson), 2 (Normal Homoscedastic), 3 (Negative Binomial) or 4 (Normal Heteroscedastic)")
@@ -44,7 +44,8 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
     {
 	v2<-c(v2,mean(data[i:(i+h-1)]))
     }
-     ypois<-fitdistr(v2,"gamma")
+     v3<-quantile(v2,probs=seq(0,1,0.1))
+     ypois<-fitdistr(v3,"gamma")
   }
   
   if ((model==3)&(theta==0))
@@ -87,7 +88,7 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
 
   }
 
-  if((prior=='default')&(length(hyper)==0))
+  if(length(hyper)==0)
   {
     if(model==1)
 	hyper=c(ypois$estimate[1],1/ypois$estimate[2]) else if(model==3)
