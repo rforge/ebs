@@ -1,6 +1,6 @@
-EBSegmentation <- function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta=0, var=0) UseMethod("EBSegmentation")
+EBSegmentation <- function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta = numeric(), var = numeric()) UseMethod("EBSegmentation")
 
-EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta=0, var = 0)
+EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta = numeric(), var = numeric())
 {
   if ((model!=1)&(model!=2)&(model!=3)&(model!=4))
     stop("Choose model=1 (Poisson), 2 (Normal Homoscedastic), 3 (Negative Binomial) or 4 (Normal Heteroscedastic)")
@@ -8,47 +8,19 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
     stop("Give me a vector of data to segment")
   n=length(data)
 
-  if ((model==2)&(var==0))
+  if ((model==2)&(length(var)==0))
   {
      data1<-data[-(1:3)]
-     data2<-data[-c(1,2,length(data))]
-     data3<-data[-c(1,length(data)-1,length(data))]
-     data4<-data[-((length(data)-2):length(data))]
+     data2<-data[-c(1,2,n)]
+     data3<-data[-c(1,n-1,n)]
+     data4<-data[-(n-2):n]
      d<-c(0.1942, 0.2809, 0.3832, -0.8582)
      v2<-d[1]*data1+d[2]*data2+d[3]*data3+d[4]*data4
      v2<-v2*v2
-     var<-sum(v2)/(length(data)-3)
+     var<-sum(v2)/(n-3)
   }
 
-  if ((model==1)&(length(hyper)==0))
-  {
-    i<-1
-    pold<-0
-    while (i<n)
-    {
-      pnew=0
-      while((i<n) & (data[i]!=0)) i<-i+1
-      while((i<n) & (data[i]==0) )
-      { 
-        pnew=pnew+1
-        i<-i+1
-      }
-      if(pnew>pold)
-      {
-        pold=pnew
-      }  
-    }
-    h<-max(pold+1,4)
-    v2<-NULL
-    for (i in 1:(n-h+1))
-    {
-	v2<-c(v2,mean(data[i:(i+h-1)]))
-    }
-     v3<-quantile(v2,probs=seq(0,1,0.1))
-     ypois<-fitdistr(v3,"gamma")
-  }
-  
-  if ((model==3)&(theta==0))
+  if ((model==3)&(length(theta)==0))
   {
     i<-1
     pold<-0
@@ -91,7 +63,7 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
   if(length(hyper)==0)
   {
     if(model==1)
-	hyper=c(ypois$estimate[1],1/ypois$estimate[2]) else if(model==3)
+	hyper=c(1,1) else if(model==3)
 	hyper=c(1/2,1/2) else if(model==2)
 	hyper=c(0,1) else
 	hyper=c(y$estimate[1],0,y$estimate[2],1)
@@ -151,9 +123,9 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
   EBSegmentation.res
 }
 
-EBSDistrib<-function(x, k, Kk,...) UseMethod("EBSDistrib")
+EBSDistrib<-function(x, k, Kk) UseMethod("EBSDistrib")
 
-EBSDistrib.default<-function(x, k, Kk,...)
+EBSDistrib.default<-function(x, k, Kk)
 {
   if(k<1)
     stop("k has to be >0")
@@ -172,9 +144,9 @@ EBSDistrib.default<-function(x, k, Kk,...)
   EBSDistrib.res
 }
 
-EBSICL<-function(x,...) UseMethod("EBSICL")
+EBSICL<-function(x) UseMethod("EBSICL")
 
-EBSICL.default<-function(x,...)
+EBSICL.default<-function(x)
 {
 
   DataLi=as.vector(t(x$Li))
@@ -191,9 +163,9 @@ EBSICL.default<-function(x,...)
   EBSICL.res
 }
 
-EBSBIC<-function(x,...) UseMethod("EBSBIC")
+EBSBIC<-function(x) UseMethod("EBSBIC")
 
-EBSBIC.default<-function(x,...)
+EBSBIC.default<-function(x)
 {
 
   DataCol=as.vector(x$Col)
@@ -208,9 +180,9 @@ EBSBIC.default<-function(x,...)
   EBSBIC.res
 }
 
-EBSPostK<-function(x,...) UseMethod("EBSPostK")
+EBSPostK<-function(x) UseMethod("EBSPostK")
 
-EBSPostK.default<-function(x,...)
+EBSPostK.default<-function(x)
 {
 
   DataCol=as.vector(x$Col)
@@ -224,21 +196,21 @@ EBSPostK.default<-function(x,...)
   EBSPostK.res
 }
 
-EBSPlotProba<-function(x,k,data=FALSE, file=character(), type='pdf',...) UseMethod("EBSPlotProba")
+EBSPlotProba<-function(x,K,data=FALSE, file=character(), type='pdf') UseMethod("EBSPlotProba")
 
-EBSPlotProba.default<-function(x,k,data=FALSE, file=character(), type='pdf',...)
+EBSPlotProba.default<-function(x,K,data=FALSE, file=character(), type='pdf')
 {
 
-  if(k<2)
-    stop("k has to be >1")
-  if(k>x$Kmax)
-    stop("I only know the segmentation up to Kmax, chose k<=Kmax")
+  if(K<2)
+    stop("K has to be >1")
+  if(K>x$Kmax)
+    stop("I only know the segmentation up to Kmax, chose K<=Kmax")
 
   y<-list()
-  a<-rep(0,(k-1))
-  for (i in 1:(k-1))
+  a<-rep(0,(K-1))
+  for (i in 1:(K-1))
   {
-    y[[i]]<-EBSDistrib(x,i,k)
+    y[[i]]<-EBSDistrib(x,i,K)
     a[i] = max(y[[i]])
   }
   b= max(a)
@@ -252,8 +224,8 @@ EBSPlotProba.default<-function(x,k,data=FALSE, file=character(), type='pdf',...)
       par(ann=FALSE,new=TRUE)
       plot.default(y[[1]], type='l', col='blue',ylim=c(0,b),axes=FALSE)
       axis(4,col='blue')
-      if (k>2)
-        for (i in 2:(k-1))
+      if (K>2)
+        for (i in 2:(K-1))
           lines(y[[i]],col='blue')
     } else
     {
@@ -265,8 +237,8 @@ EBSPlotProba.default<-function(x,k,data=FALSE, file=character(), type='pdf',...)
         par(ann=FALSE,new=TRUE)
         plot.default(y[[1]], type='l', col='blue',ylim=c(0,b),axes=FALSE)
         axis(4,col='blue')
-        if (k>2)
-          for (i in 2:(k-1))
+        if (K>2)
+          for (i in 2:(K-1))
             lines(y[[i]],col='blue')
 	dev.off()
       }
@@ -279,8 +251,8 @@ EBSPlotProba.default<-function(x,k,data=FALSE, file=character(), type='pdf',...)
         par(ann=FALSE,new=TRUE)
         plot.default(y[[1]], type='l', col='blue',ylim=c(0,b),axes=FALSE)
         axis(4,col='blue')
-        if (k>2)
-          for (i in 2:(k-1))
+        if (K>2)
+          for (i in 2:(K-1))
             lines(y[[i]],col='blue')
 	dev.off()
       }
@@ -292,8 +264,8 @@ EBSPlotProba.default<-function(x,k,data=FALSE, file=character(), type='pdf',...)
         par(ann=FALSE,new=TRUE)
         plot.default(y[[1]], type='l', col='blue',ylim=c(0,b),axes=FALSE)
         axis(4,col='blue')
-        if (k>2)
-          for (i in 2:(k-1))
+        if (K>2)
+          for (i in 2:(K-1))
             lines(y[[i]],col='blue')
 	dev.off()
       }
@@ -303,8 +275,8 @@ EBSPlotProba.default<-function(x,k,data=FALSE, file=character(), type='pdf',...)
     if (length(file)==0)
     {
       plot(y[[1]], type='l', ylim=c(0,b), col='blue')
-      if (k>2)
-        for (i in 2:(k-1))
+      if (K>2)
+        for (i in 2:(K-1))
           lines(y[[i]],col='blue')
     } else
     {
@@ -312,8 +284,8 @@ EBSPlotProba.default<-function(x,k,data=FALSE, file=character(), type='pdf',...)
       {
 	pdf(file)
         plot(y[[1]], type='l', ylim=c(0,b), col='blue')
-        if (k>2)
-          for (i in 2:(k-1))
+        if (K>2)
+          for (i in 2:(K-1))
             lines(y[[i]],col='blue')
 	dev.off()
       }
@@ -321,8 +293,8 @@ EBSPlotProba.default<-function(x,k,data=FALSE, file=character(), type='pdf',...)
       {
 	png(file)
         plot(y[[1]], type='l', ylim=c(0,b), col='blue')
-        if (k>2)
-          for (i in 2:(k-1))
+        if (K>2)
+          for (i in 2:(K-1))
             lines(y[[i]],col='blue')
 	dev.off()
       }
@@ -330,8 +302,8 @@ EBSPlotProba.default<-function(x,k,data=FALSE, file=character(), type='pdf',...)
       {
 	postscript(file)
         plot(y[[1]], type='l', ylim=c(0,b), col='blue')
-        if (k>2)
-          for (i in 2:(k-1))
+        if (K>2)
+          for (i in 2:(K-1))
             lines(y[[i]],col='blue')
 	dev.off()
       }
@@ -339,27 +311,6 @@ EBSPlotProba.default<-function(x,k,data=FALSE, file=character(), type='pdf',...)
   }
 }
 
-EBSPostMean<-function(x,k,...) UseMethod("EBSPostMean")
-
-EBSPostMean.default<-function(x,k,...)
-{
-
-  if(k<2)
-    stop("k has to be >1")
-  if(k>x$Kmax)
-    stop("I only know the segmentation up to Kmax, chose k<=Kmax")
-
-  DataLi=as.vector(t(x$Li))
-  DataCol=as.vector(x$Col)
-  DataP=as.vector(t(x$matProba))
-  Dat=as.vector(x$data)
-  n=x$length
-  Pos=as.vector(rep(0,n))
-
-  Rep<-.C("GetPostMean",Siz = as.integer(n+1), Kk=as.integer(k), Data=as.double(Dat), Col=as.double(DataCol), Li=as.double(DataLi), P = as.double(DataP), Post = as.double(Pos))
-  EBSPostMean.res = Rep$Post
-  EBSPostMean.res
-}
 
 
 print.EBS <- function(x,...)

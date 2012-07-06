@@ -7,4 +7,4 @@ Maintainer: Alice Cleynen <alice.cleynen@agroparistech.fr>
 Depends: R (>= 2.0.0)
 Description: This package performs an exact bayesian segmentation on data and returns the probabilities of breakpoints, an ICL criteria, etc
 License: GPL (>= 2)
-Depends: R (>= 2.0.0)
+Depends: MASS

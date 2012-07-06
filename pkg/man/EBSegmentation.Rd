@@ -9,27 +9,29 @@ Exact Bayesian Segmentation for Poisson, Negative Binomial and Normal models
 Calculates the bayesian probability of each segmentation in 1 to Kmax segments (assuming the data is poisson, normal or negative binomial distributed) and returns object of class EBS.
 }
 \usage{
-EBSegmentation(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta=0.15, uniform=TRUE)
+EBSegmentation(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta = numeric(), var = numeric())
 }
 \arguments{
   \item{data}{
 	A vector containing the data within which you wish to find changepoints.
 }
   \item{model}{
-	Model under which data is assumed to be distributed. Possible values are 1 for Poisson, 2 for Normal and 3 for Negative Binomial.
+	Model under which data is assumed to be distributed. Possible values are 1 for Poisson, 2 for Normal Homoscedastic, 3 for Negative Binomial and 4 for Normal Heteroscedastic.
 }
   \item{Kmax}{
 	The maximum number of segments for the segmentation. Function will find explore the set of all possible segmentations in k segments for k in 1 to Kmax.
 }
   \item{hyper}{
-	The set of hyper-parameters for the prior on the data-distribution. If model is Poisson the conjugate law is Gamma and 2 parameters are needed. If model is Negative Binomial the conjugate is Beta and 2 parameters are needed. If model is Normal the prior on the mean is normal and the prior on the inverse variance is Gamma. Four parameters are needed. By default, if uniform is true and the parameters are set to use non informative priors. If parameters are user-defined, uniform has to be set to FALSE.
+	The set of hyper-parameters for the prior on the data-distribution. If model is Poisson the conjugate law is Gamma and 2 parameters are needed. If model is Negative Binomial the conjugate is Beta and 2 parameters are needed. If model is Normal the prior on the mean is normal, and if it is heteroscedastic the prior on the inverse variance is Gamma, so that 4 parameters are needed. If the user does not give his own hyperparameters, the package uses the following default values:
+
+For the Poisson model, Gamma(1,1) is used. For Negative Binomial model, Jeffreys' prior, Beta(1/2,1/2) is used. For the Normal Homoscedastic, N(0,1) is used for a prior on the mean. Finally, for the Normal Heteroscedastic, the package computes the MAD on the data and fits an inverse-gamma distribution on the result. The parameters are used for the prior on the variance: IG(alpha,beta), and the prior on the mean is N(0,2*beta).
 }
 
   \item{theta}{
-	If model=3 (Negative binomial), the value of the inverse of the overdispersion parameter. By default set to 0.15 as a classical value for NGS data.
+	If model=3 (Negative binomial), the value of the inverse of the overdispersion parameter. If the user does not give his own hyperparameters, the package uses a modified version of Johnson and Kotz's estimator where the mean is replaced by the median. 
 }
-  \item{uniform}{
-	Logical, default is TRUE.  If true then default parameters are used and set to non-informative priors. If False user HAS to enter parameters.
+  \item{var}{
+	If model=2 (Normal Homoscedastic), the value of the variance. If the user does not give his own hyperparameters, the package uses Hall's estimator whith d=4.
 }
 
 }
@@ -38,7 +40,7 @@ EBSegmentation(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta=0.15
 }
 \value{
 	An object of class "EBS".  
-	\item{model}{Emission distribution (Poisson, Normal, or Negative Binomial)}
+	\item{model}{Emission distribution (Poisson, Normal Homoscedastic, Negative Binomial or Normal Heteroscedastic)}
 	\item{length}{the length of the data-set}
 	\item{Kmax}{the maximum number of segments for the segmentation}
 	\item{HyperParameters}{The hyperparameters used for the prior on the data distribution}
@@ -47,10 +49,15 @@ EBSegmentation(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta=0.15
 	\item{matProba}{a matrix of size (length+1)*(length+1). Element [i,j] is the log-probability of interval [i,j[}
 }
 \references{
-Guillem Rigaill and Emilie Lebarbier and Stephane Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \url{Arxiv:1004.4347}
+Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \url{Arxiv:1004.4347}
+
+Johnson, Kotz & Kemp: Univariate Discrete Distributions
+
+Hall, Kay & Titterington: Asymptotically optimal difference-based estimation of variance in non-parametric regression
+
 }
 \author{
-Alice Cleynen
+Alice Cleynen, Guillem Rigaill, Stephane Robin
 }
 
 
@@ -58,8 +65,9 @@ Alice Cleynen
 \code{\link{EBSICL}},\code{\link{EBSDistrib}}
 }
 \examples{
-# changes for Normal model
-x=c(rnorm(50,1,1),rnorm(50,3,0.5),rnorm(100,3,2))
-ans=EBSegmentation(x,model=2) 
+# changes for Poisson model
+set.seed(1)
+x<-c(rpois(125,1),rpois(100,5),rpois(50,1),rpois(75,5),rpois(50,1))
+out <- EBSegmentation(x,model=1,Kmax=20)
 }
 

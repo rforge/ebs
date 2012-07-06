@@ -20,14 +20,14 @@ LazyLoad: \tab yes\cr
 
 }
 \author{
-Alice Cleynen
+Alice Cleynen, Guillem Rigaill, Stephane Robin
 Maintainer: Alice Cleynen <alice.cleynen@agroparistech.fr>
 }
 
 \references{
-Guillem Rigaill and Emilie Lebarbier and Stephane Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \url{Arxiv:1004.4347}
-
+Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \url{Arxiv:1004.4347}
 }
+
 \keyword{changepoint}
 \keyword{segmentation}
 \keyword{exact}
@@ -35,11 +35,15 @@ Guillem Rigaill and Emilie Lebarbier and Stephane Robin: Exact posterior distrib
 
 \examples{
 # changes for Poisson model
-x=c(rpois(100,1),rpois(50,10),rpois(150,3))
-ans=EBSegmentation(x) 
-prob=EBSDistrib(ans,1,3) #finds the distribution of the first breakpoint of a segmentation in 2 segments
-plot(prob, type='l')
-bestk=EBSICL(ans)
-print(bestk) #finds optimal number of segments according to ICL criterion
+set.seed(1)
+x<-c(rpois(125,1),rpois(100,5),rpois(50,1),rpois(75,5),rpois(50,1))
+out <- EBSegmentation(x,Kmax=20)
+bic <- EBSBIC(out)
+print(bic$NbBIC)
+icl <- EBSICL(out)
+print(icl$NbICL)
+plot(bic$BIC,type='b')
+lines(icl$ICL,type='b')
+EBSPlotProba(out, icl$NbICL, data=TRUE, file="my-segmentation.pdf")
 
 }

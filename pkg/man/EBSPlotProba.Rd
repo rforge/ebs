@@ -11,15 +11,15 @@ Given a number of segments, plots the posterior distribution of each of the chan
 }
 
 \usage{
-EBSPlotProba(x, k, data=FALSE, file=character(), type='pdf',...)
+EBSPlotProba(x, K, data=FALSE, file=character(), type='pdf')
 }
 
 \arguments{
   \item{x}{
 	An object of class EBS returned by function EBSegmentation applied to data of interest.
 }
-  \item{k}{
-	The number of segments of the segmentation for which the posterior distribution is wanted. Must have 2<k<x$Kmax
+  \item{K}{
+	The number of segments of the segmentation for which the posterior distributions are wanted. Must have 2<K<x$Kmax
 }
 
   \item{data}{
@@ -34,7 +34,7 @@ EBSPlotProba(x, k, data=FALSE, file=character(), type='pdf',...)
 }
 
 \details{
-	This function is used to plot the posterior distribution of all changepoints of a segmentation in k segments. 
+	This function is used to plot the posterior distribution of all changepoints of a segmentation in K segments. 
 }
 
 \value{
@@ -42,22 +42,23 @@ EBSPlotProba(x, k, data=FALSE, file=character(), type='pdf',...)
 }
 
 \references{
-Guillem Rigaill and Emilie Lebarbier and Stephane Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \url{Arxiv:1004.4347}
+Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \url{Arxiv:1004.4347}
 }
 
 \author{
-Alice Cleynen
+Alice Cleynen, Guillem Rigaill, Stephane Robin
 }
 
 
 \seealso{
-\code{\link{EBSegmentation}}, \code{\link{EBSDistribution}}
+\code{\link{EBSegmentation}}, \code{\link{EBSDistrib}}
 }
 \examples{
 # changes for Poisson model
-x=c(rpois(150,1),rpois(50,3),rpois(20,0.1), rpois(80,2.5))
-ans=EBSegmentation(x,Kmax=10) 
-EBSPlotProba(ans,4)
-EBSPlotProba(ans,4,data=TRUE,file="mysegmentation.png",type='png')
+set.seed(1)
+x<-c(rpois(125,1),rpois(100,5),rpois(50,1),rpois(75,5),rpois(50,1))
+out <- EBSegmentation(x,model=1,Kmax=20)
+EBSPlotProba(out,4)
+EBSPlotProba(out,4,data=TRUE,file="mysegmentation.png",type='png')
 }
 

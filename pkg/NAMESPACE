@@ -1,2 +1,3 @@
 useDynLib(EBS)
+importFrom(MASS,fitdistr)
 exportPattern("^[[:alpha:]]+")
