@@ -13,7 +13,7 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
      data1<-data[-(1:3)]
      data2<-data[-c(1,2,n)]
      data3<-data[-c(1,n-1,n)]
-     data4<-data[-(n-2):n]
+     data4<-data[-c(n-2,n-1,n)]
      d<-c(0.1942, 0.2809, 0.3832, -0.8582)
      v2<-d[1]*data1+d[2]*data2+d[3]*data3+d[4]*data4
      v2<-v2*v2
@@ -66,7 +66,7 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
 	hyper=c(1,1) else if(model==3)
 	hyper=c(1/2,1/2) else if(model==2)
 	hyper=c(0,1) else
-	hyper=c(y$estimate[1],0,y$estimate[2],1)
+	hyper=c(0,1,y$estimate[1],y$estimate[2])
   }
   
   hyper=as.vector(hyper)
@@ -353,15 +353,16 @@ print.EBS <- function(x,...)
     cat(" \n") 
   } else 
   {
-    cat("for inverse of variance: Gamma(alpha, beta): \n 2 *alpha = ") 
+    cat(" for mean: Normal(mu,sigma): \n mu=") 
     print(x$HyperParameters[1])
-    cat("\n 2* beta= ") 
-    print(x$HyperParameters[3])
-    cat("\n for mean: Normal(mu,sigma): \n mu=") 
-    print(x$HyperParameters[2])
     cat("\n variance/sigma = ") 
+    print(x$HyperParameters[2])
+    cat("\n for inverse of variance: Gamma(alpha, beta): \n 2 *alpha = ") 
+    print(x$HyperParameters[3])
+    cat("\n 2* beta= ") 
     print(x$HyperParameters[4])
     cat(" \n") 
+
   }
   if(x$model=="Negative Binomial")
   {

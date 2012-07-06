@@ -8,7 +8,6 @@
 #include <list>
 #include <math.h>
 #include <algorithm>
-#include <assert.h>
 
 #include "LogMatrix.h"
 #include "Constants.h"

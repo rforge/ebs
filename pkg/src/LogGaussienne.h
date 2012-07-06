@@ -9,13 +9,14 @@
 class LogGaussienne : public Function
 {
 public:
-  double nu0;
+
   double mu0;
-  double s0;
   double n0;
+  double nu0;
+  double s0;
   Observations<double> LesObs;
   LogGaussienne();
-  LogGaussienne(Observations<double> &MyObs, double nu, double mu, double s, double n);
+  LogGaussienne(Observations<double> &MyObs,  double mu, double n, double nu, double s);
   double operator()(int, int); // rappel: segment [a,b[
   LogGaussienne operator=(const LogGaussienne &Other);
 };

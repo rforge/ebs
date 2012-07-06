@@ -22,7 +22,7 @@ EBSegmentation(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta = nu
 	The maximum number of segments for the segmentation. Function will find explore the set of all possible segmentations in k segments for k in 1 to Kmax.
 }
   \item{hyper}{
-	The set of hyper-parameters for the prior on the data-distribution. If model is Poisson the conjugate law is Gamma and 2 parameters are needed. If model is Negative Binomial the conjugate is Beta and 2 parameters are needed. If model is Normal the prior on the mean is normal, and if it is heteroscedastic the prior on the inverse variance is Gamma, so that 4 parameters are needed. If the user does not give his own hyperparameters, the package uses the following default values:
+	The set of hyper-parameters for the prior on the data-distribution. If model is Poisson the conjugate law is Gamma and 2 parameters are needed. If model is Negative Binomial the conjugate is Beta and 2 parameters are needed. If model is Normal the prior on the mean is normal, and if it is heteroscedastic the prior on the inverse variance is Gamma, so that 4 parameters are needed. The first two are the mean hyperparameters, the last two are the variance's. If the user does not give his own hyperparameters, the package uses the following default values:
 
 For the Poisson model, Gamma(1,1) is used. For Negative Binomial model, Jeffreys' prior, Beta(1/2,1/2) is used. For the Normal Homoscedastic, N(0,1) is used for a prior on the mean. Finally, for the Normal Heteroscedastic, the package computes the MAD on the data and fits an inverse-gamma distribution on the result. The parameters are used for the prior on the variance: IG(alpha,beta), and the prior on the mean is N(0,2*beta).
 }
@@ -36,7 +36,7 @@ For the Poisson model, Gamma(1,1) is used. For Negative Binomial model, Jeffreys
 
 }
 \details{
-	This function is used to compute the matrix of segment probabilities assuming data is poisson, normal or negative binomial distributed. The probability of each interval being devided in k segments (k in 1 to Kmax) is computed. 
+	This function is used to compute the matrix of segment probabilities assuming data is poisson, normal or negative binomial distributed. The probability of each interval being divided in k segments (k in 1 to Kmax) is computed. 
 }
 \value{
 	An object of class "EBS".  

@@ -7,18 +7,19 @@
 
 LogGaussienne::LogGaussienne()
 {
-  nu0 = 0;
   mu0 = 0;
-  s0 = 0;
   n0 = 0;
+  nu0 = 0;
+  s0 = 0;
 }
 
-LogGaussienne::LogGaussienne(Observations<double> &MyObs, double nu, double mu, double s, double nn)
+LogGaussienne::LogGaussienne(Observations<double> &MyObs, double mu, double nn, double nu, double s)
 {
-  nu0 = nu;
+
   mu0 = mu;
-  s0 = s;
   n0 = nn;
+  nu0 = nu;
+  s0 = s;
   LesObs = MyObs;
 }
 

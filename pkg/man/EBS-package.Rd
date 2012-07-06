@@ -20,7 +20,8 @@ LazyLoad: \tab yes\cr
 
 }
 \author{
-Alice Cleynen, Guillem Rigaill, Stephane Robin
+Alice Cleynen, Guillem Rigaill, Stephane Robin.
+
 Maintainer: Alice Cleynen <alice.cleynen@agroparistech.fr>
 }
 
@@ -42,8 +43,8 @@ bic <- EBSBIC(out)
 print(bic$NbBIC)
 icl <- EBSICL(out)
 print(icl$NbICL)
-plot(bic$BIC,type='b')
-lines(icl$ICL,type='b')
+plot(bic$BIC,type='b',pch=1,col='blue')
+lines(icl$ICL,type='b',pch=2,col='red')
 EBSPlotProba(out, icl$NbICL, data=TRUE, file="my-segmentation.pdf")
 
 }
