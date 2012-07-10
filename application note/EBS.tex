@@ -84,9 +84,10 @@ In other words we have: $Li_{i,j}=P([\![Y_0,Y_j[\![,i)$ and $Col_{i,j}=P([\![Y_i
 \begin{verbatim}
 > set.seed(1)
 > require(EBS)
-> x<-c(rpois(125,1),rpois(100,5),rpois(50,1),
-  rpois(75,5),rpois(50,1))
-> out <- EBSegmentation(x,Kmax=20)
+> x<-c(rnbinom(125,0.1,size=0.95),rnbinom(25,0.35,size=0.95),
+ rnbinom(100,0.1,size=0.95),rnbinom(100,0.35,size=0.95),
+ rnbinom(75,0.1,size=0.95))
+> out <- EBSegmentation(x, model=3, Kmax=20)
 \end{verbatim}
 
 
@@ -126,11 +127,9 @@ the entropy $\mathcal{H}(K)$ is defined as :
 The entropy can be viewed as a penalty term and it is computed in a quadratic time. 
  Even though in this context the Bayesian Information Criterion is exact, it overestimates the number of segments while the ICL performs better \citep{rigaill_exact_2011}. However, the computation of the BIC (through function \texttt{EBSPostK}) can be usefull for later analysis such as Bayesian Model Averaging (BMA).
 \begin{verbatim}
-> bic <- EBSBIC(out)
-> print(bic$NbBIC)
-[1] 9
-> icl <- EBSICL(out)
-> print(icl$NbICL)
+> print(bic <- EBSBIC(out)$NbBIC)
+[1] 6
+> print(icl <- EBSICL(out)$NbICL)
 [1] 5
 
 \end{verbatim}
@@ -150,7 +149,7 @@ The entropy can be viewed as a penalty term and it is computed in a quadratic ti
 
 Once the number of segments is chosen, one might be interested in the distribution of the location of each change-points. Two functions are implemented to address this question. \texttt{EBSDistrib} returns the distribution of the $k^{th}$ changepoint of a segmentation in $K$ segments. \texttt{EBSPlotProba} plots the distribution of all $K\!-\!1$ change-points of a segmentation in $K$ segments. The user has the option to plot those distributions on top of the data. 
 \begin{verbatim}
-> EBSPlotProba(out, Kicl, data=TRUE,
+> EBSPlotProba(out, icl, data=TRUE,
   file="my-segmentation.pdf")
 \end{verbatim}
 
