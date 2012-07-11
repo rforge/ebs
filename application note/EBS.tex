@@ -2,11 +2,12 @@
 \copyrightyear{2005}
 \pubyear{2005}
 
+
 \begin{document}
 \firstpage{1}
 
 \title[short Title]{EBS: an Exact Bayesian Segmentation Algorithm for the analysis of biological data-sets}
-\author[Sample \textit{et~al}]{Alice Cleynen\,$^{1,*}$, Guillem Rigaill\,$^{2}$ and Stephane Robin\,$^1$\footnote{to whom correspondence should be addressed}}
+\author[Sample \textit{et~al}]{Alice Cleynen\,$^{1,*}$, Guillem Rigaill\,$^{2}$ and St\'{e}phane Robin\,$^1$\footnote{to whom correspondence should be addressed}}
 \address{$^{1}$AgroParisTech,
 16 rue Claude Bernard, 75231 Paris Cedex 05, France \\
 $^{2}$Department of XXXXXXXX, Address XXXX etc.}
@@ -136,7 +137,7 @@ The entropy can be viewed as a penalty term and it is computed in quadratic time
 
 
 \begin{figure}[!h]%figure1
-\centerline{\includegraphics[width=4.5cm]{icl-bic.pdf}}
+\centerline{\includegraphics[width=6cm]{icl-bic.pdf}}
 \caption{BIC and ICL criteria as a function of the number of segments} \label{fig:01}
 \end{figure}
 
@@ -149,15 +150,14 @@ The entropy can be viewed as a penalty term and it is computed in quadratic time
 
 Once the number of segments is chosen, one might be interested in the distribution of the location of each change-points. Two functions are implemented to address this question. \texttt{EBSDistrib} returns the distribution of the $k^{th}$ change-point of a segmentation in $K$ segments. \texttt{EBSPlotProba} plots the distribution of all $K\!-\!1$ change-points of a segmentation in $K$ segments. The user has the option to plot those distributions on top of the data. 
 \begin{verbatim}
-> EBSPlotProba(out, icl, data=TRUE,
-  file="my-segmentation.pdf")
+> EBSPlotProba(out, icl, data=TRUE)
 \end{verbatim}
 
 Figure \ref{fig:02} shows the output. 
 
 \begin{figure}[!h]%figure1
 \centerline{\includegraphics[width=6cm]{my-segmentation.pdf}}
-\caption{file \textit{my-segmentation.pdf}, output of function \texttt{EBSPlotProba}}\label{fig:02}
+\caption{Output of function \texttt{EBSPlotProba}: distribution of the localisation of the change-points on simulated data (right y-axis, blue)}\label{fig:02}
 \end{figure}
 
 
@@ -165,21 +165,21 @@ Figure \ref{fig:02} shows the output.
 
 \section{Conclusion}
 
-An exact practical computation of many powerful quantities is obtained thanks to the exploration of the entire segmentation space in a Bayesian framework adapted to the analysis of NGS and CGH-array data.
-It provides an efficient criterion for the selection of the number of segments and allows further analysis of variables such as the entropy or the location of a change-point. 
-Future improvements of the package include the analysis of other quantities of interest such as the posterior mean of the signal.
+An exact computation of many powerful quantities is obtained thanks to the exploration of the entire segmentation space in a Bayesian framework adapted to the analysis of NGS and CGH-array data.
+It provides a useful criterion for the selection of the number of segments, and allows further analysis of variables such as the entropy or the location of change-points. 
+Future improvements to the package may include the analysis of other quantities of interest, such as the posterior mean of the signal.
 
 
 
 \section*{Acknowledgement}
-We whish to thank Gregory Nuel and Michel Koskas for their help dealing with numerical issues.
+We wish to thank Gregory Nuel and Michel Koskas for their help dealing with numerical issues.
 
 
 %\bibliographystyle{natbib}
 %\bibliographystyle{achemnat}
 %\bibliographystyle{plainnat}
 %\bibliographystyle{abbrv}
-%\bibliographystyle{bioinformatics}
+\bibliographystyle{bioinformatics}
 %
 %\bibliographystyle{plain}
 %
@@ -195,7 +195,7 @@ We whish to thank Gregory Nuel and Michel Koskas for their help dealing with num
 \bibitem[Erdman and Emerson, 2007]{bcp_package}   Chandra Erdman and John W. Emerson (2007) {\bf{bcp}}: An {R} Package for Performing a Bayesian Analysis
       of Change Point Problems {\it Journal of Statistical Software}, {\bf 3} 1-13
 
-\bibitem[Guedon, 2008]{guedon_2008} Guédon, Y. (2008) Explorating the segmentation space for the assessment of multiple change-points models. {\it Technical report, Preprint INRIA} {\bf 6619}
+\bibitem[Guedon, 2008]{guedon_2008} Guédon, Y. (2008) Exploring the segmentation space for the assessment of multiple change-points models. {\it Technical report, Preprint INRIA} {\bf 6619}
 
 \bibitem[Luong {\it et~al}, 2012]{Luong_HMM_2012} Luong, T.~M., Rozenholc, Y. and Nuel, G. (2012) Fast estimation of posterior probabilities in change-point models through a constrained hidden Markov model {http://adsabs.harvard.edu/abs/2012arXiv1203.4394L}.
 
