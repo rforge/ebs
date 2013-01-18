@@ -1,6 +1,6 @@
 Package: EBS
-Version: 1.0
-Date: 2012-05-15
+Version: 1.1
+Date: 2013-01-18
 Title: Exact Bayesian Segmentation
 Author: Alice Cleynen
 Maintainer: Alice Cleynen <alice.cleynen@agroparistech.fr>
