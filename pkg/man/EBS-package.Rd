@@ -47,31 +47,35 @@ bic <- EBSBIC(out)
 print(bic$NbBIC)
 icl <- EBSICL(out)
 print(icl$NbICL)
-plot(bic$BIC,type='b',pch=1,col='blue')
+plot(bic$BIC,type='b',pch=1,col='blue',ylim=c(0,1000))
 lines(icl$ICL,type='b',pch=2,col='red')
 EBSPlotProba(out, icl$NbICL, data=TRUE, file="my-segmentation.pdf")
 
 # changes for Negative Binomial model, comparison of two profiles
 set.seed(1)
 x1<-c(rnbinom(125,size=0.2,prob=0.8),rnbinom(100,size=0.2, prob=0.1),
-
-rnbinom(50,size=0.2,prob=0.6),rnbinom(75,size=0.2, prob=0.95),rnbinom(50,size=0.2,prob=0.25))
+rnbinom(50,size=0.2,prob=0.6),rnbinom(75,size=0.2, prob=0.95),
+rnbinom(50,size=0.2,prob=0.25))
 x2<-c(rnbinom(125,size=0.15,prob=0.75),rnbinom(75,size=0.15,prob=0.2),
-
 rnbinom(75,size=0.15,prob=0.9),rnbinom(125,size=0.15,prob=0.1))
 M<-rbind(x1,x2)
 E <- EBSProfiles(M,model=3,K=10,homoscedastic=TRUE) 
 
-# Computes probabilities for both profile assuming independance but common overdispersion
+# Computes probabilities for both profile assuming independance but common 
+#overdispersion
 EBSPlotProbaProfiles(E,K=c(5,4)) 
 
-# Plots posterior distribution of each change points of the two profiles, the first into 5 segments, the second into 4.
+# Plots posterior distribution of each change points of the two profiles, 
+#the first into 5 segments, the second into 4.
 mass<-CompCredibility(E,Conditions=c(1,2),Tau=c(1,1),K=c(5,4)) 
 
-# Computes the distribution and credibility interval of the difference of location of the first change point of the two profiles, the first being devided into 5 segments, the second into 4
+# Computes the distribution and credibility interval of the difference of 
+#location of the first change point of the two profiles, 
+#the first being devided into 5 segments, the second into 4
 mass$massto0
 DecisionStatistic<-EBSStatistic(E,Conditions=c(1,2),Tau=c(1,1)) 
 
-# Computes the likelihood ratio of the profiles having same first change-point versus complementary.
+# Computes the likelihood ratio of the profiles having same first 
+#change-point versus complementary.
 
 }

@@ -67,7 +67,8 @@ Alice Cleynen
 showClass("EBS") # shows the structure of the cpt class
 
 data<-c(rpois(100,2),rpois(100,5))
-E<-EBSegmentation(data) # creates a new EBS object containing the segmentation of x
+# creates a new EBS object containing the segmentation of x
+E<-EBSegmentation(data) 
 class(E) # verifies the class of E
 getModel(E) # retrieves model of the segmentation
 dataLength(E) # retrieves the length of the signal

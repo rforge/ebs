@@ -72,10 +72,13 @@ showClass("EBS") # shows the structure of the cpt class
 x1<-c(rpois(100,2),rpois(200,5))
 x2<-c(rpois(100,3),rpois(150,8),rpois(50,2))
 data<-rbind(x1,x2)
-E<-EBSProfiles(data,K=c(2,3)) # creates a new EBSProfiles object containing the segmentation of profiles x1 and x2
+# creates a new EBSProfiles object containing the segmentation of 
+#profiles x1 and x2
+E<-EBSProfiles(data,K=c(2,3))
 class(E) # verifies the class of E
 Model(E) # retrieves model of the segmentation
-getK(E)[1] # retrieves the maximal number of segments considered for profile x1
+# retrieves the maximal number of segments considered for profile x1
+getK(E)[1]
 }
 \keyword{classes}
 \keyword{EBS}

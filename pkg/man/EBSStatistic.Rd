@@ -5,7 +5,8 @@
 
 \description{Posterior probability of profiles having same change-point location}
 
-\usage{EBSStatistic(x, Conditions = numeric(), Tau = numeric(), K = numeric(), a0=1)}
+\usage{EBSStatistic(x, Conditions = numeric(), Tau = numeric(), 
+K = numeric(), a0=1)}
 
 \arguments{
   \item{x}{An object of class EBSProfiles, outcome of function EBSProfiles applied to matrix of profiles of interest}
@@ -31,7 +32,8 @@ Hall, Kay & Titterington: Asymptotically optimal difference-based estimation of 
 \seealso{\code{\link{EBSProfiles-class}}, \code{\link{EBSProfiles}}, \code{\link{EBSegmentation}}, \code{\link{EBSICLProfiles}}}
 
 \examples{
-# Comparison of 3rd change-point of 2 profiles segmented in 5 and 4 segments with Poisson model
+# Comparison of 3rd change-point of 2 profiles segmented in 5 and 4 
+#segments with Poisson model
 set.seed(1)
 x1<-c(rpois(125,1),rpois(100,5),rpois(50,1),rpois(75,5),rpois(50,1))
 x2<-c(rpois(100,1),rpois(100,3),rpois(75,2),rpois(125,0.5))
