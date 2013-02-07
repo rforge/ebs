@@ -1,10 +1,10 @@
 Package: EBS
-Version: 1.1
-Date: 2013-01-18
+Version: 2.1
+Date: 2013-02-07
 Title: Exact Bayesian Segmentation
 Author: Alice Cleynen
 Maintainer: Alice Cleynen <alice.cleynen@agroparistech.fr>
-Depends: R (>= 2.0.0)
-Description: This package performs an exact bayesian segmentation on data and returns the probabilities of breakpoints, an ICL criteria, etc
+Depends: R (>= 2.0.0) 
+Description: This package performs an exact bayesian segmentation on data and returns the probabilities of breakpoints, an ICL criteria, comparison of change-poitn location, etc
 License: GPL (>= 2)
-Depends: MASS
+Depends: MASS, methods

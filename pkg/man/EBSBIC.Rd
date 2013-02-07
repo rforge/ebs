@@ -5,15 +5,14 @@
 Model Selection by BIC Criterion
 }
 \description{
- Computes the exact BIC criterion: -Loglikelihood (data,K)) and chooses the optimal number of segments as k= argmin(BIC)
+ Computes the exact BIC criterion: -Loglikelihood (data,K) and chooses the optimal number of segments as k= argmin(BIC)
 }
 \usage{
-EBSBIC(x)
+EBSBIC(x, prior=numeric())
 }
 \arguments{
-  \item{x}{
-	An object of class EBS returned by function EBSegmentation applied to data of interest.
-}
+  \item{x}{An object of class EBS returned by function EBSegmentation applied to data of interest.}
+  \item{prior}{A vector of size Kmax giving prior probabilities for segment numbers.}
 }
 
 \details{
@@ -21,14 +20,12 @@ EBSBIC(x)
 }
 \value{
 	\item{NbBIC}{An integer containing the choice of the optimal number of segments.} 
-	\item{BIC}{Vector of -Loglikelihood (data,K).}  
+	\item{BIC}{A vector of length Kmax returning -Loglikelihood (data,K).}  
 }
 \references{
 Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \url{Arxiv:1004.4347}
 }
-\author{
-Alice Cleynen, Guillem Rigaill, Stephane Robin
-}
+\author{Alice Cleynen}
 
 
 \seealso{

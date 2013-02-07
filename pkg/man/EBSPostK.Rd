@@ -5,40 +5,33 @@
 Posterior probabilities of the number of segments
 }
 \description{
-Computes the posterior probabilities of the number of segments assuming the prior is uniform on 1:Kmax
+For a single profile, computes the posterior probabilities of the number of segments given its prior.
 }
 \usage{
-EBSPostK(x)
+EBSPostK(x, prior=numeric())
 }
 \arguments{
-  \item{x}{
-	An object of class EBS returned by function EBSegmentation applied to data of interest.
-}
+  \item{x}{An object of class EBS returned by function EBSegmentation applied to data of interest.}
+  \item{prior}{A vector of length Kmax giving prior probabilities on the value of K. Default value is uniform on 1:Kmax.}
 }
 
-\details{
-	This function computes the posterior probabilities of the number of segments assuming the prior is uniform on 1:Kmax, so that the user can use Bayesian Model Averaging.
-}
+\details{This function computes the posterior probabilities of the number of segments, so that the user can use Bayesian Model Averaging.}
+
 \value{
 	A vector of size Kmax containing the probability of each of the number of segments.  
 }
 \references{
-Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \url{Arxiv:1004.4347}
+Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems
 }
-\author{
-Alice Cleynen, Guillem Rigaill, Stephane Robin
-}
+\author{Alice Cleynen}
 
-
-\seealso{
-\code{\link{EBSegmentation}}, \code{\link{EBSBIC}}
-}
 \examples{
 # changes for Poisson model
 set.seed(1)
 x<-c(rpois(125,1),rpois(100,5),rpois(50,1),rpois(75,5),rpois(50,1))
 out <- EBSegmentation(x,model=1,Kmax=20)
-Posterior=EBSPostK(out)
+Posterior<-EBSPostK(out)
 plot(Posterior, type='b')
 }
 
+\seealso{\code{\link{EBSegmentation}}, \code{\link{EBSBIC}}, \code{\link{EBSICL}} }

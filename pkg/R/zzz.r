@@ -1,5 +1,4 @@
-.onLoad <- function(lib, pkg) {
-    library.dynam("EBS", pkg, lib)
+.onAttach <- function(lib, pkg) {
     packageStartupMessage("EBS Loaded \n")
    
     

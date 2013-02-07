@@ -8,12 +8,11 @@ Model Selection by Integrated Completed Likelihood criterion
  Computes the exact ICL criterion: -Loglikelihood (data,K) + H(m|K) where H is the entropy of the segmentation, and chooses the optimal number of segments as k= argmin(ICL)
 }
 \usage{
-EBSICL(x)
+EBSICL(x, prior=numeric())
 }
 \arguments{
-  \item{x}{
-	An object of class EBS returned by function EBSegmentation applied to data of interest.
-}
+  \item{x}{An object of class EBS returned by function EBSegmentation applied to data of interest.}
+  \item{prior}{A vector of length Kmax giving prior probabilities on the value of K. Default value is uniform on 1:Kmax.}
 }
 
 \details{
@@ -24,15 +23,13 @@ EBSICL(x)
 	\item{ICL}{Vector of length x$Kmax containing the ICL values.} 
 }
 \references{
-Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \url{Arxiv:1004.4347}
+Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems 
 }
-\author{
-Alice Cleynen, Guillem Rigaill, Stephane Robin
-}
+\author{Alice Cleynen}
 
 
 \seealso{
-\code{\link{EBSegmentation}}, \code{\link{EBSBIC}}
+\code{\link{EBSegmentation}}, \code{\link{EBSBIC}}, \code{\link{EBSPostK}}
 }
 
 \examples{

@@ -1,3 +1,51 @@
 useDynLib(EBS)
 importFrom(MASS,fitdistr)
 exportPattern("^[[:alpha:]]+")
+
+export(
+				EBSegmentation,
+				EBSDistrib,
+				EBSICL,
+				EBSBIC,
+				EBSPostK,
+				EBSPlotProba,
+				TruncPois,
+				EBSProfiles,
+				GetCondition,
+				EBSStatistic,
+				CompCredibility,
+				EBSICLProfiles,
+				EBSPlotProbaProfiles,
+				PriorDistrib
+)
+
+exportClasses(
+							EBS,
+							EBSProfiles
+)
+
+exportMethods(
+							show,
+							dataLength,
+							getModel,
+							getData,
+							getKmax,
+							getHyperParameters,
+							getVariance,
+							getOverdispersion,
+							Li,
+							Col,
+							MatProba,
+							getLength,
+							Model,
+							Data,
+							getK,
+							HyperParameters,
+							Variance,
+							Overdispersion,
+							getLi,
+							getCol,
+							getP,
+							NbConditions
+)
+

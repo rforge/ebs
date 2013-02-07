@@ -18,7 +18,9 @@ EBSDistrib(x, k, Kk)
 	The rank of the breakpoint for which the posterior distribution is wanted. Must have 0<k<Kk
 }
   \item{Kk}{
-	The number of segments for the segmentation of interest. Must have 2<Kk<=x$Kmax
+	The number of segments for the segmentation of interest. 
+
+Must have 2<Kk<=x$Kmax
 }
 
 
@@ -27,18 +29,16 @@ EBSDistrib(x, k, Kk)
 	This function is used to compute the posterior distribution of kth changepoint for a segmentation in K segments. 
 }
 \value{
-	A vector containing distibution of kth changepoint in a segmentation in Kk	 segments.  
+	A vector containing distibution of kth changepoint in a segmentation in Kk segments.  
 }
 \references{
 Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \url{Arxiv:1004.4347}
 }
-\author{
-Alice Cleynen, Guillem Rigaill, Stephane Robin
-}
+\author{Alice Cleynen}
 
 
 \seealso{
-\code{\link{EBSegmentation}}, \code{\link{EBSICL}}
+\code{\link{EBSegmentation}}, \code{\link{EBSPlotProba}}
 }
 \examples{
 # changes for Poisson model

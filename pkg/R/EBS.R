@@ -10,14 +10,14 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
 
   if ((model==2)&(length(var)==0))
   {
-     data1<-data[-(1:3)]
-     data2<-data[-c(1,2,n)]
-     data3<-data[-c(1,n-1,n)]
-     data4<-data[-c(n-2,n-1,n)]
-     d<-c(0.1942, 0.2809, 0.3832, -0.8582)
-     v2<-d[1]*data1+d[2]*data2+d[3]*data3+d[4]*data4
-     v2<-v2*v2
-     var<-sum(v2)/(n-3)
+		data1<-data[-(1:3)]
+		data2<-data[-c(1,2,n)]
+		data3<-data[-c(1,n-1,n)]
+		data4<-data[-c(n-2,n-1,n)]
+		d<-c(0.1942, 0.2809, 0.3832, -0.8582)
+		v2<-d[1]*data1+d[2]*data2+d[3]*data3+d[4]*data4
+		v2<-v2*v2
+		var<-sum(v2)/(n-3)
   }
 
   if ((model==3)&(length(theta)==0))
@@ -34,40 +34,40 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
         i<-i+1
       }
       if(pnew>pold)
-      {
         pold=pnew
-      }  
     }
     h<-max(2*pold,15)
-	Xcum = cumsum(data)
-	X2cum = cumsum(data^2)
-	M = (Xcum[h:n] - c(0, Xcum[1:(n-h)])) / h
-	S2 = (X2cum[h:n] - c(0, X2cum[1:(n-h)])) / (h-1) - h/(h-1)*M^2
-	P = (S2/M) - 1
-	K = M^2 / (S2-M)
-	W = h*(P/(1+P))^2
-	W = W / sum(W)
+		Xcum = cumsum(data)
+		X2cum = cumsum(data^2)
+		M = (Xcum[h:n] - c(0, Xcum[1:(n-h)])) / h
+		S2 = (X2cum[h:n] - c(0, X2cum[1:(n-h)])) / (h-1) - h/(h-1)*M^2
+		K = M^2 / (S2-M)
     theta = median(K)
+    while ((theta<0)&(h<(n/2)))
+    {
+    	h<-2*h
+			M = (Xcum[h:n] - c(0, Xcum[1:(n-h)])) / h
+			S2 = (X2cum[h:n] - c(0, X2cum[1:(n-h)])) / (h-1) - h/(h-1)*M^2
+			K = M^2 / (S2-M)
+		  theta = median(K)   	
+    }
   }
 
   if ((model==4) & (length(hyper)==0))
   {
-     me<-median(data)
-     int<-abs(data-me)
-     OK<-which(int!=0)
-     inverse<-1/int[OK]
-     y<-fitdistr(inverse,"gamma")
-
+		me<-median(data)
+		int<-abs(data-me)
+		OK<-which(int!=0)
+		inverse<-1/int[OK]
+		y<-fitdistr(inverse,"gamma")
   }
 
   if(length(hyper)==0)
-  {
     if(model==1)
-	hyper=c(1,1) else if(model==3)
-	hyper=c(1/2,1/2) else if(model==2)
-	hyper=c(0,1) else
-	hyper=c(0,1,y$estimate[1],y$estimate[2])
-  }
+			hyper=c(1,1) else if(model==3)
+			hyper=c(1/2,1/2) else if(model==2)
+			hyper=c(0,1) else
+			hyper=c(0,1,y$estimate[1],y$estimate[2])
   
   hyper=as.vector(hyper)
 
@@ -98,112 +98,125 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
   if (model==1) 
   {
       model.dist="Poisson"
-      EBSegmentation.res=list(model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, Li=resLi, Col=resCol, matProba = resP)
+      EBSegmentation.res=new("EBS", model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, Li=resLi, Col=resCol, matProba = resP)
   }
 
   if (model==3) 
   {
       model.dist="Negative Binomial"
-      EBSegmentation.res=list(model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, overdispersion = theta, Li=resLi, Col=resCol, matProba = resP)
+      EBSegmentation.res=new("EBS",model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, overdispersion = theta, Li=resLi, Col=resCol, matProba = resP)
   }
 
   if (model==2) 
   {
       model.dist="Normal Homoscedastic"
-      EBSegmentation.res=list(model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, Variance = var, Li=resLi, Col=resCol, matProba = resP)
+      EBSegmentation.res=new("EBS",model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, Variance = var, Li=resLi, Col=resCol, matProba = resP)
   }
 
   if (model==4) 
   {
       model.dist="Normal Heteroscedastic"
-      EBSegmentation.res=list(model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, Li=resLi, Col=resCol, matProba = resP)
+      EBSegmentation.res=new("EBS",model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, Li=resLi, Col=resCol, matProba = resP)
   }
 
-  class(EBSegmentation.res)= "EBS"
   EBSegmentation.res
 }
 
-EBSDistrib<-function(x, k, Kk) UseMethod("EBSDistrib")
 
+EBSDistrib<-function(x, k, Kk) UseMethod("EBSDistrib")
 EBSDistrib.default<-function(x, k, Kk)
 {
+	if(class(x)!="EBS")
+		stop('object x must be of class EBS')
   if(k<1)
     stop("k has to be >0")
-  if(Kk>x$Kmax)
+  if(Kk>getKmax(x))
     stop("I only know the segmentation up to Kmax, chose K<=Kmax")
 
-  DataLi=as.vector(t(x$Li))
-  DataCol=as.vector(x$Col)
-  n=x$length
-  Dis=rep(0,n+1)
-  Dis=as.vector(Dis)
-
-  Rep<-.C("Distribution",Siz = as.integer(n+1), k=as.integer(k), Kk=as.integer(Kk), Col=as.double(DataCol), Li=as.double(DataLi), Dist=as.double(Dis))
-
-  EBSDistrib.res = Rep$Dist
+	n=dataLength(x)
+	t<-(k+1):(n-(Kk-k-1))
+	Aux<-Li(x)[k,t]+Col(x)[t,Kk-k]
+	ma<-max(Aux)
+	Aux2<-exp(Aux-ma)
+	EBSDistrib.res<-c(rep(0,k),Aux2/sum(Aux2),rep(0,Kk-k-1))
   EBSDistrib.res
 }
 
-EBSICL<-function(x) UseMethod("EBSICL")
-
-EBSICL.default<-function(x)
+EBSICL<-function(x, prior=numeric()) UseMethod("EBSICL")
+EBSICL.default<-function(x, prior=numeric())
 {
-
-  DataLi=as.vector(t(x$Li))
-  DataCol=as.vector(x$Col)
-  DataP=as.vector(t(x$matProba))
-  n=x$length
-  Kmax=x$Kmax
+	if(class(x)!="EBS")
+		stop('object x must be of class EBS')
+  DataLi=as.vector(t(Li(x)))
+  DataCol=as.vector(Col(x))
+  DataP=as.vector(t(MatProba(x)))
+  n=dataLength(x)
+  Kmax=getKmax(x)
   k=0
   icl=as.vector(rep(0,Kmax))
+  if (length(prior)==0)
+    prior=rep(1/Kmax, Kmax)
+  if (length(prior)!=Kmax)
+    stop("Prior size must be equal to Kmax")
+  if (sum(prior)!=1)
+    stop("Sum of elements of prior on K must be equal to one")
 
-  Rep<-.C("ChooseICL",Siz = as.integer(n+1), Kmax=as.integer(Kmax), Col=as.double(DataCol), Li=as.double(DataLi), P = as.double(DataP), ICL=as.double(icl), kICL = as.integer(k))
+  Rep<-.C("ChooseICL",Siz = as.integer(n+1), Kmax=as.integer(Kmax), PriorK=as.double(prior), Col=as.double(DataCol), Li=as.double(DataLi), P = as.double(DataP), ICL=as.double(icl), kICL = as.integer(k))
 
   EBSICL.res = list(ICL=Rep$ICL, NbICL=Rep$kICL)
   EBSICL.res
 }
 
-EBSBIC<-function(x) UseMethod("EBSBIC")
-
-EBSBIC.default<-function(x)
+EBSBIC<-function(x, prior=numeric()) UseMethod("EBSBIC")
+EBSBIC.default<-function(x, prior=numeric())
 {
 
-  DataCol=as.vector(x$Col)
-  n=x$length
-  Kmax=x$Kmax
+  DataCol=as.vector(Col(x))
+  n=dataLength(x)
+  Kmax=getKmax(x)
   k=0
   bic=as.vector(rep(0,Kmax))
+  if (length(prior)==0)
+    prior=rep(1/Kmax, Kmax)
+  if (length(prior)!=Kmax)
+    stop("Prior size must be equal to Kmax")
+  if (sum(prior)!=1)
+    stop("Sum of elements of prior on K must be equal to one")
 
-  Rep<-.C("ChooseBIC",Siz = as.integer(n+1), Kmax=as.integer(Kmax), Col=as.double(DataCol), BIC = as.double(bic), kBIC = as.integer(k))
+  Rep<-.C("ChooseBIC",Siz = as.integer(n+1), Kmax=as.integer(Kmax), PriorK=as.double(prior), Col=as.double(DataCol), BIC = as.double(bic), kBIC = as.integer(k))
 
   EBSBIC.res = list(BIC=Rep$BIC, NbBIC=Rep$kBIC)
   EBSBIC.res
 }
 
-EBSPostK<-function(x) UseMethod("EBSPostK")
-
-EBSPostK.default<-function(x)
+EBSPostK<-function(x, prior=numeric()) UseMethod("EBSPostK")
+EBSPostK.default<-function(x, prior=numeric())
 {
-
-  DataCol=as.vector(x$Col)
-  n=x$length
-  Kmax=x$Kmax
+	if(class(x)!="EBS")
+		stop('object x must be of class EBS')
+  DataCol=as.vector(Col(x))
+  n=dataLength(x)
+  Kmax=getKmax(x)
   post=as.vector(rep(0,Kmax))
+  if (length(prior)==0)
+    prior=rep(1/Kmax, Kmax)
+  if (length(prior)!=Kmax)
+    stop("Prior size must be equal to Kmax")
+  if (sum(prior)!=1)
+    stop("Sum of elements of prior on K must be equal to one")
 
-  Rep<-.C("PostK",Siz = as.integer(n+1), Kmax=as.integer(Kmax), Col=as.double(DataCol), Post = as.double(post))
-
-  EBSPostK.res = Rep$Post
+  EBSPostK.res = exp(-EBSBIC(x,prior)$BIC+min(EBSBIC(x,prior)$BIC))/sum(exp(-EBSBIC(x,prior)$BIC+min(EBSBIC(x,prior)$BIC)))
   EBSPostK.res
 }
 
 EBSPlotProba<-function(x,K,data=FALSE, file=character(), type='pdf') UseMethod("EBSPlotProba")
-
 EBSPlotProba.default<-function(x,K,data=FALSE, file=character(), type='pdf')
 {
-
+	if(class(x)!="EBS")
+		stop('object x must be of class EBS')
   if(K<2)
     stop("K has to be >1")
-  if(K>x$Kmax)
+  if(K>getKmax(x))
     stop("I only know the segmentation up to Kmax, chose K<=Kmax")
 
   y<-list()
@@ -220,7 +233,7 @@ EBSPlotProba.default<-function(x,K,data=FALSE, file=character(), type='pdf')
     if(length(file)==0)
     {
       par(ann=FALSE)
-      plot(x$data, pch=1)
+      plot(getData(x), pch=1)
       par(ann=FALSE,new=TRUE)
       plot.default(y[[1]], type='l', col='blue',ylim=c(0,b),axes=FALSE)
       axis(4,col='blue')
@@ -231,43 +244,43 @@ EBSPlotProba.default<-function(x,K,data=FALSE, file=character(), type='pdf')
     {
       if (type=='pdf')
       {
-	pdf(file)
+				pdf(file)
         par(ann=FALSE)
-        plot(x$data, pch=1)
+        plot(getData(x), pch=1)
         par(ann=FALSE,new=TRUE)
         plot.default(y[[1]], type='l', col='blue',ylim=c(0,b),axes=FALSE)
         axis(4,col='blue')
         if (K>2)
           for (i in 2:(K-1))
             lines(y[[i]],col='blue')
-	dev.off()
+				dev.off()
       }
 
       if (type=='png')
       {
-	png(file)
+				png(file)
         par(ann=FALSE)
-        plot(x$data, pch=1)
+        plot(getData(x), pch=1)
         par(ann=FALSE,new=TRUE)
         plot.default(y[[1]], type='l', col='blue',ylim=c(0,b),axes=FALSE)
         axis(4,col='blue')
         if (K>2)
           for (i in 2:(K-1))
             lines(y[[i]],col='blue')
-	dev.off()
+				dev.off()
       }
       if (type=='ps')
       {
-	postscript(file)
+				postscript(file)
         par(ann=FALSE)
-        plot(x$data, pch=1)
+        plot(getData(x), pch=1)
         par(ann=FALSE,new=TRUE)
         plot.default(y[[1]], type='l', col='blue',ylim=c(0,b),axes=FALSE)
         axis(4,col='blue')
         if (K>2)
           for (i in 2:(K-1))
             lines(y[[i]],col='blue')
-	dev.off()
+				dev.off()
       }
     }
   } else
@@ -282,30 +295,30 @@ EBSPlotProba.default<-function(x,K,data=FALSE, file=character(), type='pdf')
     {
       if (type=='pdf')
       {
-	pdf(file)
+				pdf(file)
         plot(y[[1]], type='l', ylim=c(0,b), col='blue')
         if (K>2)
           for (i in 2:(K-1))
             lines(y[[i]],col='blue')
-	dev.off()
+				dev.off()
       }
       if (type=='png')
       {
-	png(file)
+				png(file)
         plot(y[[1]], type='l', ylim=c(0,b), col='blue')
         if (K>2)
           for (i in 2:(K-1))
             lines(y[[i]],col='blue')
-	dev.off()
+				dev.off()
       }
       if (type=='ps')
       {
-	postscript(file)
+				postscript(file)
         plot(y[[1]], type='l', ylim=c(0,b), col='blue')
         if (K>2)
           for (i in 2:(K-1))
             lines(y[[i]],col='blue')
-	dev.off()
+				dev.off()
       }
     }
   }
@@ -313,72 +326,17 @@ EBSPlotProba.default<-function(x,K,data=FALSE, file=character(), type='pdf')
 
 
 
-print.EBS <- function(x,...)
+
+TruncPois <-function(lambda,Kmax)
 {
-  cat("\n Model used for the segmentation: \n")
-  print(x$model)
-  cat("\n Length of data: \n")
-  print(x$length)
-  cat("\n data: \n")
-  str(x$data)
-  cat("\n Maximum number of segments considered for the segmentation \n")
-  print(x$Kmax)
-  cat("\n Hyper-parameters used for prior on data distribution: \n")
-  if(x$model=="Poisson")
+  Vector<-rep(0,Kmax)
+  sum<-0
+  for (i in 1:Kmax)
   {
-    alpha = x$HyperParameters[1]
-    beta = x$HyperParameters[2]
-    cat("Gamma(alpha,beta): \n alpha=") 
-    print(alpha[1])
-    cat("\n beta= ") 
-    print(beta)
-    cat(" \n") 
-  } else if (x$model=="Negative Binomial")
-  {
-    alpha = x$HyperParameters[1]
-    beta = x$HyperParameters[2]
-    cat("Beta(alpha, beta): \n alpha= ") 
-    print(alpha[1])
-    cat("\n beta= ") 
-    print(beta)
-    cat(" \n") 
-  } else if (x$model=="Normal Homoscedastic")
-  {
-    mu = x$HyperParameters[1]
-    sig = x$HyperParameters[2]
-    cat("Normal(mu, sigma^2): \n mu= ") 
-    print(mu[1])
-    cat("\n sigma^2= ") 
-    print(sig)
-    cat(" \n") 
-  } else 
-  {
-    cat(" for mean: Normal(mu,sigma): \n mu=") 
-    print(x$HyperParameters[1])
-    cat("\n variance/sigma = ") 
-    print(x$HyperParameters[2])
-    cat("\n for inverse of variance: Gamma(alpha, beta): \n 2 *alpha = ") 
-    print(x$HyperParameters[3])
-    cat("\n 2* beta= ") 
-    print(x$HyperParameters[4])
-    cat(" \n") 
-
+    Vector[i]=exp(-lambda+i*log(lambda)-lgamma(i+1))
+    sum = sum + Vector[i]
   }
-  if(x$model=="Negative Binomial")
-  {
-    cat("\n used value for inverse of overdispersion \n")
-    print(x$overdispersion)
-  }  
-  if(x$model=="Normal Homoscedastic")
-  {
-    cat("\n used value for variance\n")
-    print(x$Variance)
-  }  
-  cat("\n Log-proba [1,i[ in j segments: ($Li)")
-  str(x$Li)
-  cat("\n Log-proba [i,n+1[ in j segments: ($Col)")
-  str(x$Col)
-  cat("\n Log-proba [i,j[: ($matProba)")
-  str(x$matProba)
-
+  for (i in 1:Kmax)
+    Vector[i] = Vector[i]/sum
+  Vector    
 }
