@@ -36,21 +36,21 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
       if(pnew>pold)
         pold=pnew
     }
-    h<-max(2*pold,15)
+    h<-15
 		Xcum = cumsum(data)
 		X2cum = cumsum(data^2)
 		M = (Xcum[h:n] - c(0, Xcum[1:(n-h)])) / h
 		S2 = (X2cum[h:n] - c(0, X2cum[1:(n-h)])) / (h-1) - h/(h-1)*M^2
 		K = M^2 / (S2-M)
-    theta = median(K)
-    while ((theta<0)&(h<(n/2)))
-    {
-    	h<-2*h
+		theta = median(K[!is.na(K)])
+		while ((theta<0)&(h<(n/2)))
+		{
+			h<-2*h
 			M = (Xcum[h:n] - c(0, Xcum[1:(n-h)])) / h
 			S2 = (X2cum[h:n] - c(0, X2cum[1:(n-h)])) / (h-1) - h/(h-1)*M^2
 			K = M^2 / (S2-M)
-		  theta = median(K)   	
-    }
+			theta = median(K[!is.na(K)])   	
+		}
   }
 
   if ((model==4) & (length(hyper)==0))
@@ -134,11 +134,12 @@ EBSDistrib.default<-function(x, k, Kk)
     stop("I only know the segmentation up to Kmax, chose K<=Kmax")
 
 	n=dataLength(x)
-	t<-(k+1):(n-(Kk-k-1))
+	t<-(k+1):(n-(Kk-k))
+	#Aux<-Li(x)[k,t]+Col(x)[t,Kk-k]-lchoose(t-1,k-1)-lchoose(n-t,Kk-k-1)
 	Aux<-Li(x)[k,t]+Col(x)[t,Kk-k]
 	ma<-max(Aux)
 	Aux2<-exp(Aux-ma)
-	EBSDistrib.res<-c(rep(0,k),Aux2/sum(Aux2),rep(0,Kk-k-1))
+	EBSDistrib.res<-c(rep(0,k),Aux2/sum(Aux2),rep(0,Kk-k))
   EBSDistrib.res
 }
 

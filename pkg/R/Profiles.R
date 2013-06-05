@@ -51,21 +51,7 @@ EBSProfiles.default <-function(data = numeric(), model=1, K=3, hyper = numeric()
   		theta<-rep(0,NbConditions)
   	for(l in 1:NbConditions)
   	{
-		  i<-1
-		  pold<-0
-		  while (i<n)
-		  {
-		    pnew=0
-		    while((i<n) & (data[l,i]!=0)) i<-i+1
-		    while((i<n) & (data[l,i]==0) )
-		    { 
-		      pnew=pnew+1
-		      i<-i+1
-		    }
-		    if(pnew>pold)
-		      pold=pnew
-		  }
-		  h2<-max(2*pold,15)
+		  h2<-15
 			Xcum = cumsum(data[l,])
 			X2cum = cumsum(data[l,]^2)
 			MA = (Xcum[h2:n] - c(0, Xcum[1:(n-h2)])) / h2
@@ -76,20 +62,36 @@ EBSProfiles.default <-function(data = numeric(), model=1, K=3, hyper = numeric()
 				tall<-c(tall,K2)
 			} else
 			{
-		  	theta[l] = median(K2)
+		  	theta[l] = median(K2[!is.na(K2)])
 		  	while ((theta[l]<0)&(h2<(n/2)))
 				{
 					h2<-2*h2
 					MA = (Xcum[h2:n] - c(0, Xcum[1:(n-h2)])) / h2
 					S2 = (X2cum[h2:n] - c(0, X2cum[1:(n-h2)])) / (h2-1) - h2/(h2-1)*MA^2
 					K2 = MA^2 / (S2-MA)
-					theta[l] = median(K2)   	
+					theta[l] = median(K2[!is.na(K2)])   	
 				}
 		 	}
 		  
   	}
   	if (homoscedastic)
-  		theta<-rep(median(tall),NbConditions)
+  	{
+  		theta<-rep(median(tall[!is.na(tall)]),NbConditions)
+  		while((theta<0)&h2<(n/2))
+  		{
+  			h2<-2*h2
+				for(l in 1:NbConditions)
+				{
+					Xcum = cumsum(data[l,])
+					X2cum = cumsum(data[l,]^2)
+					MA = (Xcum[h2:n] - c(0, Xcum[1:(n-h2)])) / h2
+					S2 = (X2cum[h2:n] - c(0, X2cum[1:(n-h2)])) / (h2-1) - h2/(h2-1)*MA^2
+					K2 = MA^2 / (S2-MA)
+					tall<-c(tall,K2)
+				}
+				theta<-rep(median(tall[!is.na(tall)]),NbConditions)  		
+  		}
+  	}
   }
 
   if ((model==4) & (length(hyper)==0))
@@ -221,8 +223,8 @@ GetCondition.default<-function(x, Condition = numeric())
 
 ##
 
-EBSStatistic <- function(x, Conditions = numeric(), Tau = numeric(), K = numeric(),a0=1) UseMethod("EBSStatistic")
-EBSStatistic.default <- function(x, Conditions = numeric(), Tau = numeric(), K = numeric(),a0=1)
+EBSStatistic <- function(x, Conditions = numeric(), Tau = numeric(), K = numeric(),p0=1/2) UseMethod("EBSStatistic")
+EBSStatistic.default <- function(x, Conditions = numeric(), Tau = numeric(), K = numeric(),p0=1/2)
 {
 	if (class(x)!="EBSProfiles")
 		stop('x must be an object of class EBSProfiles')
@@ -255,8 +257,8 @@ EBSStatistic.default <- function(x, Conditions = numeric(), Tau = numeric(), K =
 	for (i in 2:I)	
 		y<-y*EBSDistrib(GetCondition(x,Conditions[i]),Tau[i],K[i])
 	y0<-sum(y)
-	a1<-Geta1(n,Tau,K,a0)
-	EBSStatistic.res<-a0*y0/((a0-a1)*y0+a1)
+	EBSStatistic.res<-p0/(1-p0)*(1-CardE0(n,Tau,K))/CardE0(n,Tau,K)*y0/(1-y0)
+	EBSStatistic.res<-EBSStatistic.res/(1+EBSStatistic.res)
 	EBSStatistic.res
 }
 
@@ -432,7 +434,8 @@ PriorDistrib<-function(n,k,K)
 	dis
 }
 
-Geta1<-function(n,k,K,a0)
+
+CardE0<-function(n,k,K)
 {
 	if (length(k)!=length(K))
 		stop('k and K must be vectors of same length')
@@ -440,8 +443,6 @@ Geta1<-function(n,k,K,a0)
 	y<-rep(1,n)
 	for (i in 1:I)
 		y<-y*PriorDistrib(n,k[i],K[i])
-	card<-sum(y)
-	a1<-(1-a0*card)/(1-card)
-	a1
+	sum(y)
 }
 
