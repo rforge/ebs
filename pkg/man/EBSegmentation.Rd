@@ -10,7 +10,7 @@ Calculates the bayesian probability of each segmentation in 1 to Kmax segments (
 \usage{
 EBSegmentation(data=numeric(), model=1, Kmax = 15, hyper = numeric(), 
 
-theta = numeric(), var = numeric())
+theta = numeric(), var = numeric(), unif= TRUE)
 }
 \arguments{
   \item{data}{A vector containing the data within which you wish to find changepoints.}
@@ -22,6 +22,7 @@ For the Poisson model, Gamma(1,1) is used. For Negative Binomial model, Jeffreys
 
   \item{theta}{If model=3 (Negative binomial), the value of the inverse of the overdispersion parameter. If the user does not give his own hyperparameters, the package uses a modified version of Johnson and Kotz's estimator where the mean is replaced by the median. }
   \item{var}{If model=2 (Normal Homoscedastic), the value of the variance. If the user does not give his own hyperparameters, the package uses Hall's estimator whith d=4.}
+	 \item{unif}{A boolean stating whether prior on segmentation is uniform given number of segments. If false, then the prior favors segmentation with segments of equal length, i.e. n_r is proportional to the inverse of segment length.}  
 }
 
 \details{This function is used to compute the matrix of segment probabilities assuming data is poisson, normal or negative binomial distributed. The probability of each interval being divided in k segments (k in 1 to Kmax) is computed.}

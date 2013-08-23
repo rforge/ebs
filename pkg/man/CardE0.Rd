@@ -7,12 +7,13 @@ Prior probability of E0
  Probability under uniform that profiles share same change-point location
 }
 \usage{
-CardE0(n,k,K)
+CardE0(n,k,K,unif=TRUE)
 }
 \arguments{
   \item{n}{Integer giving length of datasets.}
   \item{k}{Vector of integers giving change-point number of datasets.}
   \item{K}{Vector of integers giving number of segments in segmentation of each profile.}
+  \item{unif}{Boolean stating whether prior on segmentation is uniform given K. If false then prior favors segments of equal length.}
 }
 
 \details{
@@ -37,6 +38,6 @@ Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation 
 n<-100
 k<-c(1,3)
 K<-c(5,5)
-CardE0(n,k,K)
+CardE0(n,k,K,TRUE)
 }
 

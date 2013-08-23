@@ -2,6 +2,7 @@
 \alias{CompCredibility}
 \alias{CompCredibility.default}
 \alias{print.Credibility}
+\alias{plot.Credibility}
 \title{Comparison of two profiles with credibility intervals}
 
 \description{

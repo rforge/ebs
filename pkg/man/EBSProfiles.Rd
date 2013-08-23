@@ -9,7 +9,7 @@ For each profile i, calculates the bayesian probability of each segmentation in 
 \usage{
 EBSProfiles(data=numeric(), model=1, K = 3, hyper = numeric(), 
 
-theta = numeric(), var = numeric(), homoscedastic = FALSE)
+theta = numeric(), var = numeric(), homoscedastic = FALSE, unif= TRUE)
 }
 
 \arguments{
@@ -24,6 +24,8 @@ For the Poisson model, Gamma(1,1) is used. For Negative Binomial model, Jeffreys
   \item{var}{If model=2 (Normal Homoscedastic), the vector of values of the variance. If the user does not give his own hyperparameters, the package uses Hall's estimator whith d=4. If homoscedastic is TRUE, the mean of the estimate over all profile is used, else one value per profile is computed.}
 	
 	 \item{homoscedastic}{If model=2 (Normal Homoscedastic) or model=3, indicates whether the fixed parameter (variance or overidspersion) is common for all profiles or is profile-specific.}
+	 
+	 \item{unif}{A boolean stating whether prior on segmentation is uniform given number of segments. If false, then the prior favors segmentation with segments of equal length, i.e. n_r is proportional to the inverse of segment length.}
 }
 
 \details{This function is used to compute the matrix of segment probabilities assuming data is poisson, normal or negative binomial distributed. The probability of each interval being divided in k segments (k in 1 to Kmax) is computed. }

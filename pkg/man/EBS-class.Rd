@@ -13,7 +13,7 @@
 \alias{EBS-method,getKmax}
 \alias{EBS-method,getHyperParameters}
 \alias{EBS-method,getVariance}
-
+\alias{EBS-method,getPriorm}
 
 \title{Class "EBS"}
 \description{
@@ -39,6 +39,7 @@ Objects can be created by calls of the form \code{new("EBS", ...)}.
     \item{\code{Li}:}{Object of class \code{"numeric"}, matrix of size Kmax*(length+1) where element [i,j] is the log-probability of interval [1,j[ being segmented in i segments}
     \item{\code{Col}:}{Object of class \code{"numeric"}, a matrix of size (length+1)*Kmax where element [i,j] is the log-probability of interval [i,n] being segmented in j segments}
     \item{\code{matProba}:}{a matrix of size (length+1)*(length+1)where element [i,j] is the log-probability of interval [i,j[}
+    \item{\code{unif}:}{a boolean stating whether prior on segmentation is uniform given number of segments}
   }
 }
 \section{Methods}{
@@ -53,6 +54,7 @@ Objects can be created by calls of the form \code{new("EBS", ...)}.
     \item{Li}{\code{signature(object = "EBS")}: retrieves Li slot }
     \item{Col}{\code{signature(object = "EBS")}: retrieves Col slot }
     \item{MatProba}{\code{signature(object = "EBS")}: retrieves matProba slot }
+    \item{getPriorm}{\code{signature(object = "EBS")}: retrieves unif slot }
   }
 }
 
