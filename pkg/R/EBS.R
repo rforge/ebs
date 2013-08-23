@@ -1,6 +1,8 @@
-EBSegmentation <- function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta = numeric(), var = numeric()) UseMethod("EBSegmentation")
+#### Initialization of the matrices #####
 
-EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta = numeric(), var = numeric())
+EBSegmentation <- function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta = numeric(), var = numeric(), unif = TRUE) UseMethod("EBSegmentation")
+
+EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = numeric(), theta = numeric(), var = numeric(), unif = TRUE)
 {
   if ((model!=1)&(model!=2)&(model!=3)&(model!=4))
     stop("Choose model=1 (Poisson), 2 (Normal Homoscedastic), 3 (Negative Binomial) or 4 (Normal Heteroscedastic)")
@@ -83,12 +85,13 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
   Col = as.vector(Col)
   P=matrix(0,nrow=(n+1),ncol=(n+1))
   P=as.vector(P)
+  unif=unif
 
   if (model==1)
-    Rep<-.C("SegmentPoisson", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), Data = as.integer(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS") else if (model==3)
-    Rep<-.C("SegmentBinNeg", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), theta = as.double(theta), Data = as.integer(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS") else if (model==2)
-    Rep<-.C("SegmentGaussienneHomo", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), Var = as.double(var), Data = as.double(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS") else if (model==4)
-    Rep<-.C("SegmentGaussienne", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), Data = as.double(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS")
+    Rep<-.C("SegmentPoisson", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), Data = as.integer(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P), u = as.logical(unif),  PACKAGE="EBS") else if (model==3)
+    Rep<-.C("SegmentBinNeg", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), theta = as.double(theta), Data = as.integer(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P), u = as.logical(unif),  PACKAGE="EBS") else if (model==2)
+    Rep<-.C("SegmentGaussienneHomo", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), Var = as.double(var), Data = as.double(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P), u = as.logical(unif),  PACKAGE="EBS") else if (model==4)
+    Rep<-.C("SegmentGaussienne", Size = as.integer(n),KMax = as.integer(Kmax), hyper = as.double(hyper), Data = as.double(data), Col = as.double(Col), Li = as.double(Li), P = as.double(P), u = as.logical(unif),  PACKAGE="EBS")
 
   resLi=matrix(Rep$Li,ncol=Kmax)
   resLi<-t(resLi)
@@ -98,30 +101,67 @@ EBSegmentation.default <-function(data=numeric(), model=1, Kmax = 15, hyper = nu
   if (model==1) 
   {
       model.dist="Poisson"
-      EBSegmentation.res=new("EBS", model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, Li=resLi, Col=resCol, matProba = resP)
+      EBSegmentation.res=new("EBS", model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, Li=resLi, Col=resCol, matProba = resP, unif=unif)
   }
 
   if (model==3) 
   {
       model.dist="Negative Binomial"
-      EBSegmentation.res=new("EBS",model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, overdispersion = theta, Li=resLi, Col=resCol, matProba = resP)
+      EBSegmentation.res=new("EBS",model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, overdispersion = theta, Li=resLi, Col=resCol, matProba = resP, unif=unif)
   }
 
   if (model==2) 
   {
       model.dist="Normal Homoscedastic"
-      EBSegmentation.res=new("EBS",model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, Variance = var, Li=resLi, Col=resCol, matProba = resP)
+      EBSegmentation.res=new("EBS",model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, Variance = var, Li=resLi, Col=resCol, matProba = resP, unif=unif)
   }
 
   if (model==4) 
   {
       model.dist="Normal Heteroscedastic"
-      EBSegmentation.res=new("EBS",model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, Li=resLi, Col=resCol, matProba = resP)
+      EBSegmentation.res=new("EBS",model=model.dist, data=data, length=n, Kmax=Kmax, HyperParameters = hyper, Li=resLi, Col=resCol, matProba = resP, unif=unif)
   }
 
   EBSegmentation.res
 }
 
+
+EBSPrior <- function(n=numeric(), Kmax = 15, unif = TRUE) UseMethod("EBSPrior")
+EBSPrior.default <-function(n=numeric(), Kmax = 15, unif = TRUE)
+{
+  if (n<=0)
+    stop("Give me n larger than 1")
+
+
+  Li=matrix(0,nrow=Kmax,ncol=(n+1))
+  Li = as.vector(Li)
+  Col=matrix(0,ncol=Kmax,nrow=(n+1))
+  Col = as.vector(Col)
+  P=matrix(0,nrow=(n+1),ncol=(n+1))
+  P=as.vector(P)
+
+  if (unif)
+    Rep<-.C("SetPriorUnif", Size = as.integer(n),KMax = as.integer(Kmax), Col = as.double(Col), Li = as.double(Li), P = as.double(P), u = as.logical(unif),  PACKAGE="EBS") else 
+    Rep<-.C("SetPriorSize", Size = as.integer(n),KMax = as.integer(Kmax), Col = as.double(Col), Li = as.double(Li), P = as.double(P), u = as.logical(unif),  PACKAGE="EBS") 
+
+  resLi=matrix(Rep$Li,ncol=Kmax)
+  resLi<-t(resLi)
+  resCol=matrix(Rep$Col,ncol=Kmax)
+  resP=matrix(Rep$P,ncol=(n+1))
+  resP = t(resP)
+  if (unif) 
+  {
+      model.dist="Uniform"
+      EBSegmentation.res=new("EBS", model=model.dist, length=n, Kmax=Kmax,  Li=resLi, Col=resCol, matProba = resP)
+  } else
+  {
+      model.dist="Size"
+      EBSegmentation.res=new("EBS",model=model.dist,  length=n, Kmax=Kmax,  Li=resLi, Col=resCol, matProba = resP)
+  }
+  EBSegmentation.res
+}
+
+#### Posterior probability of a change-point location #####
 
 EBSDistrib<-function(x, k, Kk) UseMethod("EBSDistrib")
 EBSDistrib.default<-function(x, k, Kk)
@@ -143,6 +183,8 @@ EBSDistrib.default<-function(x, k, Kk)
   EBSDistrib.res
 }
 
+#### Computation of ICL criterion #####
+
 EBSICL<-function(x, prior=numeric()) UseMethod("EBSICL")
 EBSICL.default<-function(x, prior=numeric())
 {
@@ -153,6 +195,7 @@ EBSICL.default<-function(x, prior=numeric())
   DataP=as.vector(t(MatProba(x)))
   n=dataLength(x)
   Kmax=getKmax(x)
+  unif=getPriorm(x)
   k=0
   icl=as.vector(rep(0,Kmax))
   if (length(prior)==0)
@@ -162,11 +205,14 @@ EBSICL.default<-function(x, prior=numeric())
   if (sum(prior)!=1)
     stop("Sum of elements of prior on K must be equal to one")
 
-  Rep<-.C("ChooseICL",Siz = as.integer(n+1), Kmax=as.integer(Kmax), PriorK=as.double(prior), Col=as.double(DataCol), Li=as.double(DataLi), P = as.double(DataP), ICL=as.double(icl), kICL = as.integer(k))
+  Rep<-.C("ChooseICL",Siz = as.integer(n+1), Kmax=as.integer(Kmax), PriorK=as.double(prior), Col=as.double(DataCol), Li=as.double(DataLi), P = as.double(DataP), ICL=as.double(icl), kICL = as.integer(k), u=as.logical(unif))
 
   EBSICL.res = list(ICL=Rep$ICL, NbICL=Rep$kICL)
   EBSICL.res
 }
+
+
+#### Computation of BIC criterion #####
 
 EBSBIC<-function(x, prior=numeric()) UseMethod("EBSBIC")
 EBSBIC.default<-function(x, prior=numeric())
@@ -175,6 +221,7 @@ EBSBIC.default<-function(x, prior=numeric())
   DataCol=as.vector(Col(x))
   n=dataLength(x)
   Kmax=getKmax(x)
+  unif=getPriorm(x)
   k=0
   bic=as.vector(rep(0,Kmax))
   if (length(prior)==0)
@@ -184,11 +231,15 @@ EBSBIC.default<-function(x, prior=numeric())
   if (sum(prior)!=1)
     stop("Sum of elements of prior on K must be equal to one")
 
-  Rep<-.C("ChooseBIC",Siz = as.integer(n+1), Kmax=as.integer(Kmax), PriorK=as.double(prior), Col=as.double(DataCol), BIC = as.double(bic), kBIC = as.integer(k))
+  Rep<-.C("ChooseBIC",Siz = as.integer(n+1), Kmax=as.integer(Kmax), PriorK=as.double(prior), Col=as.double(DataCol), BIC = as.double(bic), kBIC = as.integer(k), u=as.logical(unif))
 
   EBSBIC.res = list(BIC=Rep$BIC, NbBIC=Rep$kBIC)
   EBSBIC.res
 }
+
+
+
+#### Computation of posterior probability for $K$ #####
 
 EBSPostK<-function(x, prior=numeric()) UseMethod("EBSPostK")
 EBSPostK.default<-function(x, prior=numeric())
@@ -198,6 +249,7 @@ EBSPostK.default<-function(x, prior=numeric())
   DataCol=as.vector(Col(x))
   n=dataLength(x)
   Kmax=getKmax(x)
+  unif=getPriorm(x)
   post=as.vector(rep(0,Kmax))
   if (length(prior)==0)
     prior=rep(1/Kmax, Kmax)
@@ -209,6 +261,8 @@ EBSPostK.default<-function(x, prior=numeric())
   EBSPostK.res = exp(-EBSBIC(x,prior)$BIC+min(EBSBIC(x,prior)$BIC))/sum(exp(-EBSBIC(x,prior)$BIC+min(EBSBIC(x,prior)$BIC)))
   EBSPostK.res
 }
+
+#### Plot of Posterior probability of all change-point locations #####
 
 EBSPlotProba<-function(x,K,data=FALSE, file=character(), type='pdf') UseMethod("EBSPlotProba")
 EBSPlotProba.default<-function(x,K,data=FALSE, file=character(), type='pdf')

@@ -1,6 +1,8 @@
-EBSProfiles <- function(data=numeric(), model=1, K = 3, hyper = numeric(), theta = numeric(), var = numeric(), homoscedastic = FALSE) UseMethod("EBSProfiles")
+### Construction of matrices for each profile ###
 
-EBSProfiles.default <-function(data = numeric(), model=1, K=3, hyper = numeric(), theta = numeric(), var = numeric(), homoscedastic = FALSE)
+EBSProfiles <- function(data=numeric(), model=1, K = 3, hyper = numeric(), theta = numeric(), var = numeric(), homoscedastic = FALSE, unif=TRUE) UseMethod("EBSProfiles")
+
+EBSProfiles.default <-function(data = numeric(), model=1, K=3, hyper = numeric(), theta = numeric(), var = numeric(), homoscedastic = FALSE, unif=TRUE)
 {
   if ((model!=1)&(model!=2)&(model!=3)&(model!=4))
     stop("Choose model=1 (Poisson), 2 (Normal Homoscedastic), 3 (Negative Binomial) or 4 (Normal Heteroscedastic)")
@@ -127,6 +129,8 @@ EBSProfiles.default <-function(data = numeric(), model=1, K=3, hyper = numeric()
   	stop("Give me either one theta per profile, or one common for all")
   if ((model==2) &(length(var)!=NbConditions))
   	stop("Give me either one variance per profile, or one common for all")
+  	
+  unif=unif
 	
 	for (i in 1:NbConditions)
 	{
@@ -144,10 +148,10 @@ EBSProfiles.default <-function(data = numeric(), model=1, K=3, hyper = numeric()
 		if (model==2)	vari<-var[i]
 
 		if (model==1)
-    	Rep<-.C("SegmentPoisson", Size = as.integer(n),KMax = as.integer(Km), hyper = as.double(hyp), Data = as.integer(M), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS") else if (model==3)
-    	Rep<-.C("SegmentBinNeg", Size = as.integer(n),KMax = as.integer(Km), hyper = as.double(hyp), theta = as.double(thei), Data = as.integer(M), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS") else if (model==2)
-    	Rep<-.C("SegmentGaussienneHomo", Size = as.integer(n),KMax = as.integer(Km), hyper = as.double(hyp), Var = as.double(vari), Data = as.double(M), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS") else if (model==4)
-    	Rep<-.C("SegmentGaussienne", Size = as.integer(n),KMax = as.integer(Km), hyper = as.double(hyp), Data = as.double(M), Col = as.double(Col), Li = as.double(Li), P = as.double(P),  PACKAGE="EBS")
+    	Rep<-.C("SegmentPoisson", Size = as.integer(n),KMax = as.integer(Km), hyper = as.double(hyp), Data = as.integer(M), Col = as.double(Col), Li = as.double(Li), P = as.double(P), u = as.logical(unif),  PACKAGE="EBS") else if (model==3)
+    	Rep<-.C("SegmentBinNeg", Size = as.integer(n),KMax = as.integer(Km), hyper = as.double(hyp), theta = as.double(thei), Data = as.integer(M), Col = as.double(Col), Li = as.double(Li), P = as.double(P), u = as.logical(unif),  PACKAGE="EBS") else if (model==2)
+    	Rep<-.C("SegmentGaussienneHomo", Size = as.integer(n),KMax = as.integer(Km), hyper = as.double(hyp), Var = as.double(vari), Data = as.double(M), Col = as.double(Col), Li = as.double(Li), P = as.double(P), u = as.logical(unif),  PACKAGE="EBS") else if (model==4)
+    	Rep<-.C("SegmentGaussienne", Size = as.integer(n),KMax = as.integer(Km), hyper = as.double(hyp), Data = as.double(M), Col = as.double(Col), Li = as.double(Li), P = as.double(P), u = as.logical(unif),  PACKAGE="EBS")
 
 
 		Lin[[i]]=t(matrix(Rep$Li,ncol=Km))
@@ -189,7 +193,7 @@ EBSProfiles.default <-function(data = numeric(), model=1, K=3, hyper = numeric()
   EBSProfiles.res
 }
 
-##
+### Extract the information for one profile ###
 
 GetCondition<-function(x, Condition = numeric()) UseMethod("GetCondition")
 GetCondition.default<-function(x, Condition = numeric())
@@ -213,15 +217,59 @@ GetCondition.default<-function(x, Condition = numeric())
   	hyper<-c(HyperParameters(x)[2*(Condition-1)+1],HyperParameters(x)[2*(Condition-1)+2])
   	var<-Variance(x)[Condition]
 		GetCondition.res=new("EBS", model = Model(x), data = Data(x)[Condition,], length = getLength(x), Kmax = getK(x)[Condition], HyperParameters = hyper, Variance = var, Li = Lii, Col = Coli, matProba = Pi)
-	} else
+	} else if (Model(x)=="Normal Heteroscedastic")
 	{
 		hyper<- c(HyperParameters(x)[4*(Condition-1)+1], HyperParameters(x)[4*(Condition-1)+2], HyperParameters(x)[4*(Condition-1)+3], HyperParameters(x)[4*(Condition-1)+4])
 		GetCondition.res=new("EBS", model = Model(x), data = Data(x)[Condition,], length = getLength(x), Kmax = getK(x)[Condition], HyperParameters = hyper, Li = Lii, Col = Coli, matProba = Pi)  	
+  } else
+  {
+  	GetCondition.res=new("EBS", model = Model(x), length = getLength(x), Kmax = getK(x)[Condition], Li = Lii, Col = Coli, matProba = Pi)  
   }
 	GetCondition.res
 }
 
-##
+
+EBSPriorProfiles <- function(n=numeric(), K = 3, unif=TRUE) UseMethod("EBSPriorProfiles")
+
+EBSPriorProfiles.default <-function(n=numeric(), K = 3, unif=TRUE)
+{
+ 	NbConditions<-length(K)
+  Lin<-list()
+  Coln<-list()
+  Pn<-list()
+
+	for (i in 1:NbConditions)
+	{
+		Km<-K[i]
+		Li=matrix(0,nrow=K[i],ncol=(n+1))
+		Li = as.vector(Li)
+		Col=matrix(0,ncol=K[i],nrow=(n+1))
+		Col = as.vector(Col)
+		P=matrix(0,nrow=(n+1),ncol=(n+1))
+		P=as.vector(P)
+		if (unif)
+		  Rep<-.C("SetPriorUnif", Size = as.integer(n),KMax = as.integer(Km), Col = as.double(Col), Li = as.double(Li), P = as.double(P), u = as.logical(unif), PACKAGE="EBS") else 
+		  Rep<-.C("SetPriorSize", Size = as.integer(n),KMax = as.integer(Km), Col = as.double(Col), Li = as.double(Li), P = as.double(P), u = as.logical(unif),  PACKAGE="EBS") 
+
+		Lin[[i]]=t(matrix(Rep$Li,ncol=Km))
+		Coln[[i]]=matrix(Rep$Col,ncol=Km)
+		Pn[[i]]=t(matrix(Rep$P,ncol=(n+1)))
+	}
+
+  if (unif) 
+  {
+      model.dist="Uniform"
+      EBSProfiles.res=new("EBSProfiles", model=model.dist, length=n, NbConditions = NbConditions, K=K, Li=Lin, Col=Coln, P=Pn)
+  } else
+  {
+      model.dist="Size"
+      EBSProfiles.res=new("EBSProfiles", model=model.dist, length=n, NbConditions = NbConditions, K=K, Li=Lin, Col=Coln, P=Pn)
+  } 
+  EBSProfiles.res
+}
+
+
+### Computation of posterior probability of E0 ###
 
 EBSStatistic <- function(x, Conditions = numeric(), Tau = numeric(), K = numeric(),p0=1/2) UseMethod("EBSStatistic")
 EBSStatistic.default <- function(x, Conditions = numeric(), Tau = numeric(), K = numeric(),p0=1/2)
@@ -263,7 +311,7 @@ EBSStatistic.default <- function(x, Conditions = numeric(), Tau = numeric(), K =
 }
 
 
-###
+### Computation of the credibility interval of the difference of change-point location ###
 
 CompCredibility<-function(x, Conditions, Tau = numeric(), K = numeric()) UseMethod("CompCredibility")
 CompCredibility.default<-function(x, Conditions, Tau = numeric(), K = numeric()) 
@@ -329,7 +377,21 @@ print.Credibility<-function(x, ...)
 	print(x$massto0)
 }
 
-###
+plot.Credibility<-function(x,level=0.95,...)
+{
+	if(length(x$Distribution)==0)
+		stop('x must be an object created with function CompCredibility')
+	y<-x$Distribution	
+	n<-(length(y[,1])-1)/2
+	aux<-sort(y[,2],decreasing=TRUE,index.return=TRUE)
+	inter<-y[sort(aux$ix[1:(max(which(cumsum(aux$x)<level))+1)]),1]
+	bord<-max(abs(min(inter)-20),abs(max(inter)+20))
+	plot(y[(n-bord):(n+bord),],type='l',xlab="",ylab="distribution")
+	rect(inter-0.5, -0.2,inter+0.5,1,col=rgb(1,0.7,0.7),border=NA)
+	lines(y[(n-bord):(n+bord),],type='l')
+}
+
+### Computation of the ICL criterion for each profile ###
 
 EBSICLProfiles<-function(x, prior=numeric()) UseMethod("EBSICLProfiles")
 EBSICLProfiles.default<-function(x, prior=numeric())
@@ -361,7 +423,7 @@ EBSICLProfiles.default<-function(x, prior=numeric())
 
 
 
-###
+### Plots posterior distribution of change-points for each profile ###
 
 EBSPlotProbaProfiles<-function(x,K=numeric(),data=FALSE) UseMethod("EBSPlotProbaProfiles")
 EBSPlotProbaProfiles.default<-function(x,K=numeric(),data=FALSE)
@@ -435,14 +497,19 @@ PriorDistrib<-function(n,k,K)
 }
 
 
-CardE0<-function(n,k,K)
+
+CardE0<-function(n,k,K,unif=TRUE)
 {
 	if (length(k)!=length(K))
 		stop('k and K must be vectors of same length')
 	I<-length(K)
 	y<-rep(1,n)
 	for (i in 1:I)
-		y<-y*PriorDistrib(n,k[i],K[i])
+	{
+		a<-EBSPrior(n,K[i],unif)
+		y<-y*EBSDistrib(a,k[i],K[i])
+	}
 	sum(y)
 }
+
 

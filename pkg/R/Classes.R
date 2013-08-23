@@ -1,5 +1,5 @@
 setClass("EBS",
-         representation(model = "character", data= "numeric", length="numeric", Kmax="numeric", HyperParameters="numeric", Variance="numeric", overdispersion="numeric", Li="matrix", Col="matrix", matProba="matrix"),
+         representation(model = "character", data= "numeric", length="numeric", Kmax="numeric", HyperParameters="numeric", Variance="numeric", overdispersion="numeric", Li="matrix", Col="matrix", matProba="matrix", unif="logical"),
          prototype(model = "Poisson", Kmax=15),
 )
 
@@ -146,6 +146,15 @@ setMethod("MatProba", "EBS",
 	return ( object@matProba )
 	}
 )
+
+setGeneric ("getPriorm",
+	function(object){ standardGeneric ("getPriorm" )}
+)
+setMethod("getPriorm", "EBS",
+	function (object){
+	return ( object@unif )
+	}
+)  
 
 ############################################################
 
@@ -337,5 +346,4 @@ setMethod("NbConditions", "EBSProfiles",
 	}
 )
 
-  
 
