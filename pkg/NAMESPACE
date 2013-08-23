@@ -17,7 +17,8 @@ export(
 				EBSICLProfiles,
 				EBSPlotProbaProfiles,
 				PriorDistrib,
-				plot.Credibility
+				EBSPrior,
+				EBSPriorProfiles
 )
 
 exportClasses(
@@ -34,6 +35,7 @@ exportMethods(
 							getHyperParameters,
 							getVariance,
 							getOverdispersion,
+							getPriorm,
 							Li,
 							Col,
 							MatProba,
