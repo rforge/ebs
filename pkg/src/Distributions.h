@@ -29,8 +29,8 @@ public:
 	LogMatrix<FunctionTypeName> P;
 	Distributions();
 	Distributions(int N, int K);
-	Distributions(int N, int K, FunctionTypeName *f);
-	void Initialize(int N=0, int K=0, FunctionTypeName *f=NULL);
+	Distributions(int N, int K, FunctionTypeName *f, bool *u);
+	void Initialize(int N=0, int K=0, FunctionTypeName *f=NULL, bool *u=NULL);
 	double ** GetDataLi();
 	double ** GetDataCol();
 	int ChooseICL();	// Entropie de la segmentation en k segments
@@ -111,14 +111,14 @@ Distributions<FunctionTypeName>::Distributions(int N, int K)
 }
 
 template<typename FunctionTypeName>
-Distributions<FunctionTypeName>::Distributions(int N, int K, FunctionTypeName *f)
+Distributions<FunctionTypeName>::Distributions(int N, int K, FunctionTypeName *f, bool *u)
 {
-	Initialize(N, K, f);
+	Initialize(N, K, f, u);
 
 }
 
 template<typename FunctionTypeName>
-void Distributions<FunctionTypeName>::Initialize(int N, int MK, FunctionTypeName *f)
+void Distributions<FunctionTypeName>::Initialize(int N, int MK, FunctionTypeName *f, bool *u)
 {
 	Size = N;
 	K = MK;
@@ -136,7 +136,7 @@ void Distributions<FunctionTypeName>::Initialize(int N, int MK, FunctionTypeName
 			DataLi[i][j] = MINUS_INFINITY;
 	if (f != NULL)
 	{
-	  LogMatrix<FunctionTypeName> Aux(N,f);
+	  LogMatrix<FunctionTypeName> Aux(N,f,u);
 	  P = Aux;
 	  LogVector<FunctionTypeName> Vcol(P, true);
 	  LogVector<FunctionTypeName> Vli(P, false);

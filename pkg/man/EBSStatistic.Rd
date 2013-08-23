@@ -6,17 +6,17 @@
 \description{Posterior probability of profiles having same change-point location}
 
 \usage{EBSStatistic(x, Conditions = numeric(), Tau = numeric(), 
-K = numeric(), a0=1)}
+K = numeric(), p0=1/2)}
 
 \arguments{
   \item{x}{An object of class EBSProfiles, outcome of function EBSProfiles applied to matrix of profiles of interest}
   \item{Conditions}{A vector containing the set of index of profiles to compare using posterior probabilities.}
   \item{Tau}{The vector of index of the change-point of interest for each profile. If field is left empty, default value is $1$ for all profiles. If only one value is entered, this value is used for all profiles.}
   \item{K}{The vector of number of segments of the segmentation for each profile. If field is left empty, function calls EBSICLProfiles to choose value of K. If only one value is entered, this value is used for all profiles.}
-  \item{a0}{The ratio of prior probability of having same change-point under uniform segmentation and alternative neasure (see details). If field is left empty, default value is 1.}
+  \item{p0}{The prior probability of having same change-point. If field is left empty, default value is 1/2.}
 }
 
-\value{ The value of the likelihood ratio (see details).}
+\value{ The posterior probability of profiles having same change-point location  (see details).}
 
 \references{
 Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems 
@@ -56,11 +56,10 @@ out <- EBSStatistic(E,Conditions=c(1,2),Tau=c(3,3),K=c(5,4))
 
 - \eqn{p}{p} denotes a probability measure chosen by user for which:
 
-- \eqn{a_0=p(\mathcal{E}_0|K)/q(\mathcal{E}_0|K)}{a_0=p(E_0|K)/q(E_0|K)} 
-
-- \eqn{a_1=p(\mathcal{E}_1|K)/q(\mathcal{E}_1|K)}{a_1=p(E_1|K)/q(E_1|K)}
+- \eqn{p_0=p(\mathcal{E}_0|K)}{p_0=p(E_0|K)} 
 
 
-Then the function returns \deqn{S(Y)= \frac{a_0 q(\mathcal{E}_0|Y,K) }{ (a_0-a_1)q(\mathcal{E}_0|Y,K) +a_1}}{S(Y)=a_0 q(E_0|Y,K) /[(a_0-a_1)q(E_0|Y,K) +a_1]}
+
+Then the function returns \deqn{S(Y)= \frac{p_0 (1-q_0)q(\mathcal{E}_0|Y,K)) }{ (1-p_0)q_0q(Y|K) +(p_0-q_0)q(\mathcal{E}_0|Y,K) +}}{S(Y)=p_0 (1-q_0)q(E_0|Y,K) /[(1-p_0)q_0 q(Y|K) + (p_0-q_0)q(E_0|Y,K)]}
 }
 

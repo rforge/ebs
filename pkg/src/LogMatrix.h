@@ -30,9 +30,9 @@ public:
 	double **Data;
 	LogMatrix();
 	LogMatrix(int N);
-	LogMatrix(int N, FunctionTypeName *f);
+	LogMatrix(int N, FunctionTypeName *f, bool *u);
 	LogMatrix( LogMatrix<FunctionTypeName> &M);
-	void Initialize(int N = 0, FunctionTypeName *f = NULL);
+	void Initialize(int N = 0, FunctionTypeName *f = NULL, bool *u = NULL);
 	void operator =(const LogMatrix<FunctionTypeName> &Original);
 
 
@@ -64,19 +64,25 @@ void LogMatrix<FunctionTypeName>::operator =(const LogMatrix<FunctionTypeName> &
 		delete[] Data;
 	}
 	Initialize(Original.Size);
-	for (int i = 0; i < Size; i++)
-		for (int j = i + 1; j < Size; j++)
-			Data[i][j] = Original.Data[i][j];
-	return;
+	if (Original.Data != NULL)
+	{
+		for (int i = 0; i < Size; i++)
+			for (int j = i + 1; j < Size; j++)
+				Data[i][j] = Original.Data[i][j];
+		return;
+	}
 }
 
 template<typename FunctionTypeName>
 LogMatrix<FunctionTypeName>::LogMatrix( LogMatrix<FunctionTypeName> &M)
 {
 	Initialize(M.Size);
-	for (int i = 0; i < Size; i++)
-		for (int j = i + 1; j < Size; j++)
-			Data[i][j] = M.Data[i][j];
+	if (M.Data !=NULL)
+	{
+		for (int i = 0; i < Size; i++)
+			for (int j = i + 1; j < Size; j++)
+				Data[i][j] = M.Data[i][j];
+	}
 }
 
 template<typename FunctionTypeName>
@@ -94,14 +100,14 @@ LogMatrix<FunctionTypeName>::LogMatrix(int N)
 
 
 template<typename FunctionTypeName>
-LogMatrix<FunctionTypeName>::LogMatrix(int N, FunctionTypeName *f)
+LogMatrix<FunctionTypeName>::LogMatrix(int N, FunctionTypeName *f, bool *u)
 {
-	Initialize(N, f);
+	Initialize(N, f, u);
 }
 
 
 template<typename FunctionTypeName>
-void LogMatrix<FunctionTypeName>::Initialize(int N, FunctionTypeName *f)
+void LogMatrix<FunctionTypeName>::Initialize(int N, FunctionTypeName *f, bool *u)
 {
 	Size = N;
 	Data = new double *[Size];
@@ -113,7 +119,11 @@ void LogMatrix<FunctionTypeName>::Initialize(int N, FunctionTypeName *f)
 	if (f != NULL)
 		for (int i = 0; i < Size; i++)
 			for (int j = i + 1; j < Size; j++)
+			{
 				Data[i][j] = (*f)(i, j);
+				if (!(*u))
+					Data[i][j] += log((double) (j-i));	
+			}
 }
 
 

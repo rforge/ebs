@@ -42,14 +42,14 @@ Hall, Kay & Titterington: Asymptotically optimal difference-based estimation of 
 # changes for Poisson model
 set.seed(1)
 x<-c(rpois(125,1),rpois(100,5),rpois(50,1),rpois(75,5),rpois(50,1))
-out <- EBSegmentation(x,model=1,Kmax=20)
+out <- EBSegmentation(x,Kmax=20)
 bic <- EBSBIC(out)
 print(bic$NbBIC)
 icl <- EBSICL(out)
 print(icl$NbICL)
 plot(bic$BIC,type='b',pch=1,col='blue',ylim=c(0,1000))
 lines(icl$ICL,type='b',pch=2,col='red')
-EBSPlotProba(out, 5, data=TRUE)
+EBSPlotProba(out, icl$NbICL, data=TRUE, file="my-segmentation.pdf")
 
 # changes for Negative Binomial model, comparison of two profiles
 set.seed(1)

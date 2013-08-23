@@ -16,7 +16,8 @@ export(
 				CompCredibility,
 				EBSICLProfiles,
 				EBSPlotProbaProfiles,
-				PriorDistrib
+				PriorDistrib,
+				plot.Credibility
 )
 
 exportClasses(

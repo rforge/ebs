@@ -4,15 +4,15 @@
 \alias{EBS-class}
 \alias{EBS-method, show}
 \alias{EBS-method,getModel}
-\alias{cpt-method,Li}
-\alias{cpt-method,Col}
-\alias{cpt-method,dataLength}
-\alias{cpt-method,MatProba}
-\alias{cpt-method,getOverdispersion}
-\alias{cpt-method,getData}
-\alias{cpt-method,getKmax}
-\alias{cpt-method,getHyperParameters}
-\alias{cpt-method,getVariance}
+\alias{EBS-method,Li}
+\alias{EBS-method,Col}
+\alias{EBS-method,dataLength}
+\alias{EBS-method,MatProba}
+\alias{EBS-method,getOverdispersion}
+\alias{EBS-method,getData}
+\alias{EBS-method,getKmax}
+\alias{EBS-method,getHyperParameters}
+\alias{EBS-method,getVariance}
 
 
 \title{Class "EBS"}
