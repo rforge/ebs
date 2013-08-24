@@ -1,0 +1,37 @@
+\name{getPriorm}
+\alias{getPriorm}
+
+\title{ Generic function}
+\description{
+ Generic function
+}
+\usage{
+getPriorm(object)
+}
+\arguments{
+  \item{object}{An object of class EBS}
+}
+
+\details{
+	Returns the slot unif of an object of class EBS
+	}
+\value{
+	A boolean stating whether prior on segmentation is uniform. 
+}
+\references{
+Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \url{Arxiv:1004.4347}
+}
+\author{Alice Cleynen}
+
+
+\seealso{
+\code{\link{Col}},\code{\link{getLi}} }
+
+
+\examples{
+x=new("EBS") # new EBS object
+getPriorm(x) # retrieves the unif slot from x
+}
+
+\keyword{methods}
+\keyword{unif}
