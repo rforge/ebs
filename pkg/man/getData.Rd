@@ -25,7 +25,7 @@ Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation 
 
 
 \seealso{
-\code{\link{dataLength}}}
+\code{\link{Length}}}
 
 
 \examples{

@@ -1,10 +1,10 @@
-\name{getK-methods}
+\name{Kmax-methods}
 \docType{methods}
-\alias{getK-methods}
-\alias{getK,EBSProfiles-method}
-\title{ ~~ Methods for Function \code{getK} ~~}
+\alias{Kmax-methods}
+\alias{Kmax,EBSProfiles-method}
+\title{ ~~ Methods for Function \code{Kmax} ~~}
 \description{
- ~~ Methods for function \code{getK} ~~
+ ~~ Methods for function \code{Kmax} ~~
 }
 \section{Methods}{
 \describe{
@@ -14,4 +14,4 @@
 }
 }}
 \keyword{methods}
-\keyword{K}
+\keyword{Kmax}

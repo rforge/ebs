@@ -49,18 +49,18 @@ setMethod("show", "EBS",
 		  cat("\n used value for variance\n")
 		  print(object@Variance)
 		}  
-		cat("\n Log-proba [1,i[ in j segments: ($Li)")
+		cat("\n Log-proba [1,i[ in j segments: (getLi)")
 		str(object@Li)
-		cat("\n Log-proba [i,n+1[ in j segments: ($Col)")
+		cat("\n Log-proba [i,n+1[ in j segments: (getCol)")
 		str(object@Col)
-		cat("\n Log-proba [i,j[: ($matProba)")
+		cat("\n Log-proba [i,j[: (getP)")
 		str(object@matProba)
 })
 
-setGeneric ("dataLength",
-	function(object){ standardGeneric ("dataLength" )}
+setGeneric ("getLength",
+	function(object){ standardGeneric ("getLength" )}
 )
-setMethod("dataLength", "EBS",
+setMethod("getLength", "EBS",
 	function (object){
 	return ( object@length )
 	}
@@ -120,28 +120,28 @@ setMethod("getOverdispersion", "EBS",
 	}
 )
 
-setGeneric ("Li",
-	function(object){ standardGeneric ("Li" )}
+setGeneric ("getLi",
+	function(object){ standardGeneric ("getLi" )}
 )
-setMethod("Li", "EBS",
+setMethod("getLi", "EBS",
 	function (object){
 	return ( object@Li )
 	}
 )
 
-setGeneric ("Col",
-	function(object){ standardGeneric ("Col" )}
+setGeneric ("getCol",
+	function(object){ standardGeneric ("getCol" )}
 )
-setMethod("Col", "EBS",
+setMethod("getCol", "EBS",
 	function (object){
 	return ( object@Col )
 	}
 )
 
-setGeneric ("MatProba",
-	function(object){ standardGeneric ("MatProba" )}
+setGeneric ("getP",
+	function(object){ standardGeneric ("getP" )}
 )
-setMethod("MatProba", "EBS",
+setMethod("getP", "EBS",
 	function (object){
 	return ( object@matProba )
 	}
@@ -173,7 +173,7 @@ setMethod("show", "EBSProfiles",
 		print(object@NbConditions)
 		cat("\n Length of each profile: \n")
 		print(object@length)
-		cat("\n data: (getData) \n")
+		cat("\n data: (Data) \n")
 		str(object@data)
 		cat("\n Maximum number of segments considered for each profile \n")
 		print(object@K)
@@ -238,19 +238,19 @@ setMethod("show", "EBSProfiles",
 		  print(object@Variance)
 		}  
 		cat("\n For each profile l: ")
-		cat("\n   Log-proba [1,j[ in i segments: (getLi[[l]])")
+		cat("\n   Log-proba [1,j[ in i segments: (Li(x)[[l]])")
 		str(object@Li)
-		cat("\n   Log-proba [i,n+1[ in j segments: (getCol[[l]])")
+		cat("\n   Log-proba [i,n+1[ in j segments: (Col(x)[[l]])")
 		str(object@Col)
-		cat("\n   Log-proba [i,j[: (getP[[l]])")
+		cat("\n   Log-proba [i,j[: (matProba(x)[[l]])")
 		str(object@P)
 })
 
 
-setGeneric ("getLength",
-	function(object){ standardGeneric ("getLength" )}
+setGeneric ("Length",
+	function(object){ standardGeneric ("Length" )}
 )
-setMethod("getLength", "EBSProfiles",
+setMethod("Length", "EBSProfiles",
 	function (object){
 	return ( object@length )
 	}
@@ -274,10 +274,10 @@ setMethod("Data", "EBSProfiles",
 	}
 )
 
-setGeneric ("getK",
-	function(object){ standardGeneric ("getK" )}
+setGeneric ("Kmax",
+	function(object){ standardGeneric ("Kmax" )}
 )
-setMethod("getK", "EBSProfiles",
+setMethod("Kmax", "EBSProfiles",
 	function (object){
 	return ( object@K )
 	}
@@ -310,28 +310,28 @@ setMethod("Overdispersion", "EBSProfiles",
 	}
 )
 
-setGeneric ("getLi",
-	function(object){ standardGeneric ("getLi" )}
+setGeneric ("Li",
+	function(object){ standardGeneric ("Li" )}
 )
-setMethod("getLi", "EBSProfiles",
+setMethod("Li", "EBSProfiles",
 	function (object){
 	return ( object@Li )
 	}
 )
 
-setGeneric ("getCol",
-	function(object){ standardGeneric ("getCol" )}
+setGeneric ("Col",
+	function(object){ standardGeneric ("Col" )}
 )
-setMethod("getCol", "EBSProfiles",
+setMethod("Col", "EBSProfiles",
 	function (object){
 	return ( object@Col )
 	}
 )
 
-setGeneric ("getP",
-	function(object){ standardGeneric ("getP" )}
+setGeneric ("matProba",
+	function(object){ standardGeneric ("matProba" )}
 )
-setMethod("getP", "EBSProfiles",
+setMethod("matProba", "EBSProfiles",
 	function (object){
 	return ( object@P )
 	}

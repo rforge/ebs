@@ -200,31 +200,31 @@ GetCondition.default<-function(x, Condition = numeric())
 {
 	if (length(Condition)!=1)
 		stop('I need one and only one number of profile to return')
- 	Lii<-getLi(x)[[Condition]]
-  Coli<-getCol(x)[[Condition]]
-  Pi<-getP(x)[[Condition]]
+ 	Lii<-Li(x)[[Condition]]
+  Coli<-Col(x)[[Condition]]
+  Pi<-matProba(x)[[Condition]]
   unifi<-Priorm(x)
   if (Model(x)=="Poisson")
   {
   	hyper<-c(HyperParameters(x)[2*(Condition-1)+1],HyperParameters(x)[2*(Condition-1)+2])
-		GetCondition.res=new("EBS", model=Model(x), data=Data(x)[Condition,], length=getLength(x), Kmax=getK(x)[Condition], HyperParameters=hyper, Li=Lii, Col= Coli, matProba=Pi, unif=unifi)
+		GetCondition.res=new("EBS", model=Model(x), data=Data(x)[Condition,], length=Length(x), Kmax=Kmax(x)[Condition], HyperParameters=hyper, Li=Lii, Col= Coli, matProba=Pi, unif=unifi)
 	} else if (Model(x)=="Negative Binomial")
 	{
   	hyper<-c(HyperParameters(x)[2*(Condition-1)+1],HyperParameters(x)[2*(Condition-1)+2])
   	theta<-Overdispersion(x)[Condition]
-		GetCondition.res=new("EBS", model = Model(x), data = Data(x)[Condition,], length = getLength(x), Kmax = getK(x)[Condition], HyperParameters = hyper, overdispersion = theta, Li = Lii, Col = Coli, matProba = Pi, unif=unifi)
+		GetCondition.res=new("EBS", model = Model(x), data = Data(x)[Condition,], length = Length(x), Kmax = Kmax(x)[Condition], HyperParameters = hyper, overdispersion = theta, Li = Lii, Col = Coli, matProba = Pi, unif=unifi)
 	} else if (Model(x)=="Normal Homoscedastic")
 	{
   	hyper<-c(HyperParameters(x)[2*(Condition-1)+1],HyperParameters(x)[2*(Condition-1)+2])
   	var<-Variance(x)[Condition]
-		GetCondition.res=new("EBS", model = Model(x), data = Data(x)[Condition,], length = getLength(x), Kmax = getK(x)[Condition], HyperParameters = hyper, Variance = var, Li = Lii, Col = Coli, matProba = Pi, unif=unifi)
+		GetCondition.res=new("EBS", model = Model(x), data = Data(x)[Condition,], length = Length(x), Kmax = Kmax(x)[Condition], HyperParameters = hyper, Variance = var, Li = Lii, Col = Coli, matProba = Pi, unif=unifi)
 	} else if (Model(x)=="Normal Heteroscedastic")
 	{
 		hyper<- c(HyperParameters(x)[4*(Condition-1)+1], HyperParameters(x)[4*(Condition-1)+2], HyperParameters(x)[4*(Condition-1)+3], HyperParameters(x)[4*(Condition-1)+4])
-		GetCondition.res=new("EBS", model = Model(x), data = Data(x)[Condition,], length = getLength(x), Kmax = getK(x)[Condition], HyperParameters = hyper, Li = Lii, Col = Coli, matProba = Pi, unif=unifi)  	
+		GetCondition.res=new("EBS", model = Model(x), data = Data(x)[Condition,], length = Length(x), Kmax = Kmax(x)[Condition], HyperParameters = hyper, Li = Lii, Col = Coli, matProba = Pi, unif=unifi)  	
   } else
   {
-  	GetCondition.res=new("EBS", model = Model(x), length = getLength(x), Kmax = getK(x)[Condition], Li = Lii, Col = Coli, matProba = Pi, unif=unifi)
+  	GetCondition.res=new("EBS", model = Model(x), length = Length(x), Kmax = Kmax(x)[Condition], Li = Lii, Col = Coli, matProba = Pi, unif=unifi)
   }
 	GetCondition.res
 }
@@ -285,7 +285,7 @@ EBSStatistic.default <- function(x, Conditions = numeric(), Tau = numeric(), K =
 	if (length(K)==1)
 		K<-rep(K,I)
 	if (length(K)==0)
-		K<-getK(x)[Conditions]
+		K<-Kmax(x)[Conditions]
 	if (length(Tau)==1)
 		Tau<-rep(Tau,I)
 	if (length(Tau)==0)
@@ -295,13 +295,13 @@ EBSStatistic.default <- function(x, Conditions = numeric(), Tau = numeric(), K =
 	if (length(Tau)!=I)
 		stop('need a change-point number per profile')
 	for (i in 1:I)
-		if(K[i]>getK(x)[Conditions[i]])
+		if(K[i]>Kmax(x)[Conditions[i]])
 			stop('number of segments can not be larger than that given to function EBSProfiles')
 	for (i in 1:I)
 		if(Tau[i]>=K[i])
 			stop('number of change-point has to be strictly inferior to number of segment in profile')
 	
-	n<-getLength(x)		
+	n<-Length(x)		
 	y<-EBSDistrib(GetCondition(x,Conditions[1]),Tau[1],K[1])
 	for (i in 2:I)	
 		y<-y*EBSDistrib(GetCondition(x,Conditions[i]),Tau[i],K[i])
@@ -336,7 +336,7 @@ CompCredibility.default<-function(x, Conditions, Tau = numeric(), K = numeric())
 	if (length(Tau)!=2)
 		stop('need a change-point number per profile')
 	for (i in 1:2)
-		if(K[i]>getK(x)[Conditions[i]])
+		if(K[i]>Kmax(x)[Conditions[i]])
 			stop('number of segments can not be larger than that given to function EBSProfiles')
 	for (i in 1:2)
 		if(Tau[i]>=K[i])
@@ -344,7 +344,7 @@ CompCredibility.default<-function(x, Conditions, Tau = numeric(), K = numeric())
 	y1<-EBSDistrib(GetCondition(x,Conditions[1]),Tau[1],K[1])
 	y2<-EBSDistrib(GetCondition(x,Conditions[2]),Tau[2],K[2])
 	y<-NULL
-	for (d in (2-getLength(x)):0)
+	for (d in (2-Length(x)):0)
 	{
 	  rab<-rep(0,abs(d))
 	  a1<-c(rab,y1)
@@ -352,7 +352,7 @@ CompCredibility.default<-function(x, Conditions, Tau = numeric(), K = numeric())
 	  temp1<-sum(a1*b1)
 	  y<-rbind(y,c(d,temp1))
 	}
-	for (d in 1:(getLength(x)-2))
+	for (d in 1:(Length(x)-2))
 	{
 	  rab<-rep(0,abs(d))
 	  a1<-c(rab,y2)
@@ -361,8 +361,8 @@ CompCredibility.default<-function(x, Conditions, Tau = numeric(), K = numeric())
 	  y<-rbind(y,c(d,temp1))
 	}
 	aux<-sort(y[,2],decreasing=TRUE,index.return=TRUE)
-	a<-sum(aux$x[1:which(aux$ix==(getLength(x)-1))])
-	b<-a-aux$x[which(aux$ix==(getLength(x)-1))]
+	a<-sum(aux$x[1:which(aux$ix==(Length(x)-1))])
+	b<-a-aux$x[which(aux$ix==(Length(x)-1))]
 	cred<-list(Distribution=y,masswith0=a,massto0=b)
 	class(cred)<-"Credibility"	
 	cred			
@@ -400,13 +400,13 @@ EBSICLProfiles.default<-function(x, prior=numeric())
 	if (class(x)!="EBSProfiles")
 		stop('object x must be of class EBSProfiles')
 	I<-NbConditions(x)
-	KMAX=max(getK(x))
+	KMAX=max(Kmax(x))
 	if (length(prior)==0)
 	{
 		prior<-matrix(0,nrow=I,ncol=KMAX)
 		for (i in 1:I)
-			for (k in 1:getK(x)[i])
-				prior[i,k]<-1/getK(x)[i]
+			for (k in 1:Kmax(x)[i])
+				prior[i,k]<-1/Kmax(x)[i]
 	}
 	if (nrow(prior)!=I)
 		stop('Need a prior on the number of segments for each profile')
@@ -414,7 +414,7 @@ EBSICLProfiles.default<-function(x, prior=numeric())
 	K<-rep(0,I)
 	for (i in 1:I)
 	{
-		aux<-EBSICL(GetCondition(x,i),prior=prior[i,1:(getK(x)[i])])
+		aux<-EBSICL(GetCondition(x,i),prior=prior[i,1:(Kmax(x)[i])])
 		icl[[i]]<-aux$ICL
 		K[i]<-aux$NbICL
 	}
@@ -440,7 +440,7 @@ EBSPlotProbaProfiles.default<-function(x,K=numeric(),data=FALSE)
 	{
   	if(K[i]<2)
     	stop("K has to be >1")
-  	if(K[i]>getK(x)[i])
+  	if(K[i]>Kmax(x)[i])
     	stop("I only know the segmentation up to Kmax, chose K<=Kmax")
   }
 	par(mfrow=c(I,1))

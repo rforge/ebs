@@ -1,19 +1,19 @@
-\name{MatProba}
-\alias{MatProba}
+\name{matProba}
+\alias{matProba}
 
 \title{ Generic function}
 \description{
  Generic function
 }
 \usage{
-MatProba(object)
+matProba(object)
 }
 \arguments{
-  \item{object}{An object of class EBS}
+  \item{object}{An object of class EBSProfiles}
 }
 
 \details{
-	Returns the slot P of an object of class EBS
+	Returns the slot P of an object of class EBSProfiles
 }
 \value{
 	A matrix of size (n+1)*(n+1) containing segment probabilities.
@@ -29,9 +29,9 @@ Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation 
 
 
 \examples{
-x=new("EBS") # new EBS object
-MatProba(x) # retrieves the P slot from x
+x=new("EBSProfiles") # new EBSProfiles object
+matProba(x) # retrieves the P slot from x
 }
 
 \keyword{methods}
-\keyword{MatProba}
+\keyword{matProba}

@@ -28,7 +28,7 @@ exportClasses(
 
 exportMethods(
 							show,
-							dataLength,
+							Length,
 							getModel,
 							getData,
 							getKmax,
@@ -39,11 +39,11 @@ exportMethods(
 							Priorm,
 							Li,
 							Col,
-							MatProba,
+							matProba,
 							getLength,
 							Model,
 							Data,
-							getK,
+							Kmax,
 							HyperParameters,
 							Variance,
 							Overdispersion,

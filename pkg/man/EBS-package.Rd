@@ -40,7 +40,7 @@ Hall, Kay & Titterington: Asymptotically optimal difference-based estimation of 
 
 \examples{
 # changes for Poisson model
-#set.seed(1)
+set.seed(1)
 x<-c(rpois(125,1),rpois(100,5),rpois(50,1),rpois(75,5),rpois(50,1))
 out <- EBSegmentation(x,Kmax=20)
 bic <- EBSBIC(out)

@@ -4,10 +4,10 @@
 \alias{EBS-class}
 \alias{EBS-method, show}
 \alias{EBS-method,getModel}
-\alias{EBS-method,Li}
-\alias{EBS-method,Col}
-\alias{EBS-method,dataLength}
-\alias{EBS-method,MatProba}
+\alias{EBS-method,getLi}
+\alias{EBS-method,getCol}
+\alias{EBS-method,getLength}
+\alias{EBS-method,getP}
 \alias{EBS-method,getOverdispersion}
 \alias{EBS-method,getData}
 \alias{EBS-method,getKmax}
@@ -46,14 +46,14 @@ Objects can be created by calls of the form \code{new("EBS", ...)}.
   \describe{
     \item{getModel}{\code{signature(object = "EBS")}: retrieves model slot }
     \item{getData}{\code{signature(object = "EBS")}: retrieves data slot }
-    \item{dataLength}{\code{signature(object = "EBS")}: retrieves length slot }
+    \item{getLength}{\code{signature(object = "EBS")}: retrieves length slot }
     \item{getKmax}{\code{signature(object = "EBS")}: retrieves Kmax slot }
     \item{getHyperParameters}{\code{signature(object = "EBS")}: retrieves HyperParameters slot }
     \item{getVariance}{\code{signature(object = "EBS")}: retrieves Variance slot }
     \item{getOverdispersion}{\code{signature(object = "EBS")}: retrieves overdispersion slot }
-    \item{Li}{\code{signature(object = "EBS")}: retrieves Li slot }
-    \item{Col}{\code{signature(object = "EBS")}: retrieves Col slot }
-    \item{MatProba}{\code{signature(object = "EBS")}: retrieves matProba slot }
+    \item{getLi}{\code{signature(object = "EBS")}: retrieves Li slot }
+    \item{getCol}{\code{signature(object = "EBS")}: retrieves Col slot }
+    \item{getP}{\code{signature(object = "EBS")}: retrieves matProba slot }
     \item{getPriorm}{\code{signature(object = "EBS")}: retrieves unif slot }
   }
 }
@@ -73,7 +73,7 @@ data<-c(rpois(100,2),rpois(100,5))
 E<-EBSegmentation(data) 
 class(E) # verifies the class of E
 getModel(E) # retrieves model of the segmentation
-dataLength(E) # retrieves the length of the signal
+getLength(E) # retrieves the length of the signal
 }
 \keyword{classes}
 \keyword{EBS}

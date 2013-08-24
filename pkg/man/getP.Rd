@@ -9,11 +9,11 @@
 getP(object)
 }
 \arguments{
-  \item{object}{An object of class EBSProfiles}
+  \item{object}{An object of class EBS}
 }
 
 \details{
-	Returns the slot P of an object of class EBSProfiles
+	Returns the slot P of an object of class EBS
 }
 \value{
 	A list of the matrix P of each profiles.
@@ -25,11 +25,11 @@ Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation 
 
 
 \seealso{
-\code{\link{MatProba}} }
+\code{\link{matProba}} }
 
 
 \examples{
-x=new("EBSProfiles") # new EBSProfiles object
+x=new("EBS") # new EBS object
 getP(x) # retrieves the P slot from x
 }
 

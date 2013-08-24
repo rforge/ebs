@@ -9,11 +9,11 @@
 getCol(object)
 }
 \arguments{
-  \item{object}{An object of class EBSProfiles}
+  \item{object}{An object of class EBS}
 }
 
 \details{
-	Returns the slot Col of an object of class EBSProfiles
+	Returns the slot Col of an object of class EBS
 }
 \value{
 	A list where each element is a the Col matrix of size (n+1)*Kmax of a profile. 
@@ -29,7 +29,7 @@ Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation 
 
 
 \examples{
-x=new("EBSProfiles") # new EBSProfiles object
+x=new("EBS") # new EBS object
 getCol(x) # retrieves the Col slot from x
 }
 

@@ -9,11 +9,11 @@
 getLi(object)
 }
 \arguments{
-  \item{object}{An object of class EBSProfiles}
+  \item{object}{An object of class EBS}
 }
 
 \details{
-	Returns the slot Li of an object of class EBSProfiles
+	Returns the slot Li of an object of class EBS
 }
 \value{
 	A list where each element is the Li matrix of size Kmax*(n+1) of a profile 
@@ -29,7 +29,7 @@ Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation 
 
 
 \examples{
-x=new("EBSProfiles") # new EBSProfiles object
+x=new("EBS") # new EBS object
 getLi(x) # retrieves the Li slot from x
 }
 

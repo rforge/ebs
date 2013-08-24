@@ -25,11 +25,11 @@ Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation 
 
 
 \seealso{
-\code{\link{getLength}}, \code{\link{NbConditions}}}
+\code{\link{Length}}, \code{\link{NbConditions}}}
 
 
 \examples{
-x=new("EBSProfiles") # new EBS object
+x=new("EBSProfiles") # new EBSProfiles object
 Data(x) # retrieves the Data from x
 }
 

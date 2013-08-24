@@ -1,19 +1,19 @@
-\name{dataLength}
-\alias{dataLength}
+\name{Length}
+\alias{Length}
 
 \title{ Generic function}
 \description{
  Generic function
 }
 \usage{
-dataLength(object)
+Length(object)
 }
 \arguments{
-  \item{object}{An object of class EBS}
+  \item{object}{An object of class EBSProfiles}
 }
 
 \details{
-	Returns the length of the dataset used from an object of class EBS
+	Returns the length of the dataset used from an object of class EBSProfiles
 }
 \value{
 	An integer with size of data used.  
@@ -29,8 +29,8 @@ Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation 
 
 
 \examples{
-x=new("EBS") # new EBS object
-dataLength(x) # retrieves the length of data from x
+x=new("EBSProfiles") # new EBSProfiles object
+Length(x) # retrieves the length of data from x
 }
 
 \keyword{methods}

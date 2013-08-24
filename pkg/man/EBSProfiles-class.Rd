@@ -3,16 +3,16 @@
 \docType{class}
 \alias{EBSProfiles-class}
 \alias{EBSProfiles-method, show}
-\alias{EBSProfiles-method,getModel}
+\alias{EBSProfiles-method,Model}
 \alias{EBSProfiles-method,Li}
 \alias{EBSProfiles-method,Col}
-\alias{EBSProfiles-method,dataLength}
-\alias{EBSProfiles-method,MatProba}
-\alias{EBSProfiles-method,getOverdispersion}
-\alias{EBSProfiles-method,getData}
-\alias{EBSProfiles-method,getKmax}
-\alias{EBSProfiles-method,getHyperParameters}
-\alias{EBSProfiles-method,getVariance}
+\alias{EBSProfiles-method,Length}
+\alias{EBSProfiles-method,matProba}
+\alias{EBSProfiles-method,Overdispersion}
+\alias{EBSProfiles-method,Data}
+\alias{EBSProfiles-method,Kmax}
+\alias{EBSProfiles-method,HyperParameters}
+\alias{EBSProfiles-method,Variance}
 \alias{EBSProfiles-method,Priorm}
 
 
@@ -49,15 +49,15 @@ Objects can be created by calls of the form \code{new("EBSProfiles", ...)}.
   \describe{
     \item{Model}{\code{signature(object = "EBSProfiles")}: retrieves model slot }
     \item{Data}{\code{signature(object = "EBSProfiles")}: retrieves data slot }
-    \item{getLength}{\code{signature(object = "EBSProfiles")}: retrieves length slot }
+    \item{Length}{\code{signature(object = "EBSProfiles")}: retrieves length slot }
     \item{NbConditions}{\code{signature(object = "EBSProfiles")}: retrieves NbConditions slot }
-    \item{getK}{\code{signature(object = "EBSProfiles")}: retrieves K slot }
+    \item{Kmax}{\code{signature(object = "EBSProfiles")}: retrieves K slot }
     \item{HyperParameters}{\code{signature(object = "EBSProfiles")}: retrieves HyperParameters slot }
     \item{Variance}{\code{signature(object = "EBSProfiles")}: retrieves Variance slot }
     \item{Overdispersion}{\code{signature(object = "EBSProfiles")}: retrieves overdispersion slot }
-    \item{getLi}{\code{signature(object = "EBSProfiles")}: retrieves Li slot }
-    \item{getCol}{\code{signature(object = "EBSProfiles")}: retrieves Col slot }
-    \item{getP}{\code{signature(object = "EBSProfiles")}: retrieves P slot }
+    \item{Li}{\code{signature(object = "EBSProfiles")}: retrieves Li slot }
+    \item{Col}{\code{signature(object = "EBSProfiles")}: retrieves Col slot }
+    \item{matProba}{\code{signature(object = "EBSProfiles")}: retrieves P slot }
     \item{Priorm}{\code{signature(object = "EBSProfiles")}: retrieves unif slot }
   }
 }
@@ -81,7 +81,7 @@ E<-EBSProfiles(data,K=c(2,3))
 class(E) # verifies the class of E
 Model(E) # retrieves model of the segmentation
 # retrieves the maximal number of segments considered for profile x1
-getK(E)[1]
+Kmax(E)[1]
 }
 \keyword{classes}
-\keyword{EBS}
+\keyword{EBSProfiles}

@@ -1,12 +1,12 @@
-\name{getK}
-\alias{getK}
+\name{Kmax}
+\alias{Kmax}
 
 \title{ Generic function}
 \description{
  Generic function
 }
 \usage{
-getK(object)
+Kmax(object)
 }
 \arguments{
   \item{object}{An object of class EBSProfiles}
@@ -30,7 +30,7 @@ Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation 
 
 \examples{
 x=new("EBSProfiles") # new EBSProfiles object
-getK(x) # retrieves the Kmax slot from x
+Kmax(x) # retrieves the Kmax slot from x
 }
 
 \keyword{methods}
