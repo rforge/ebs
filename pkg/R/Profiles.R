@@ -169,25 +169,25 @@ EBSProfiles.default <-function(data = numeric(), model=1, K=3, hyper = numeric()
   if (model==1) 
   {
       model.dist="Poisson"
-      EBSProfiles.res=new("EBSProfiles", model=model.dist, data=Datasets, length=n, NbConditions = NbConditions, K=K, HyperParameters = hyper, Li=Lin, Col=Coln, P=Pn)
+      EBSProfiles.res=new("EBSProfiles", model=model.dist, data=Datasets, length=n, NbConditions = NbConditions, K=K, HyperParameters = hyper, Li=Lin, Col=Coln, P=Pn, unif=unif)
   }
 
   if (model==3) 
   {
       model.dist="Negative Binomial"
-      EBSProfiles.res=new("EBSProfiles", model=model.dist, data=Datasets, length=n, NbConditions = NbConditions, K=K, HyperParameters = hyper, overdispersion = theta, Li=Lin, Col=Coln, P=Pn)
+      EBSProfiles.res=new("EBSProfiles", model=model.dist, data=Datasets, length=n, NbConditions = NbConditions, K=K, HyperParameters = hyper, overdispersion = theta, Li=Lin, Col=Coln, P=Pn, unif=unif)
   }
 
   if (model==2) 
   {
       model.dist="Normal Homoscedastic"
-      EBSProfiles.res=new("EBSProfiles", model=model.dist, data=Datasets, length=n, NbConditions = NbConditions, K=K, HyperParameters = hyper, Variance = var, Li=Lin, Col=Coln, P=Pn)
+      EBSProfiles.res=new("EBSProfiles", model=model.dist, data=Datasets, length=n, NbConditions = NbConditions, K=K, HyperParameters = hyper, Variance = var, Li=Lin, Col=Coln, P=Pn, unif=unif)
   }
 
   if (model==4) 
   {
       model.dist="Normal Heteroscedastic"
-      EBSProfiles.res=new("EBSProfiles", model=model.dist, data=Datasets, length=n, NbConditions = NbConditions, K=K, HyperParameters = hyper, Li=Lin, Col=Coln, P=Pn)
+      EBSProfiles.res=new("EBSProfiles", model=model.dist, data=Datasets, length=n, NbConditions = NbConditions, K=K, HyperParameters = hyper, Li=Lin, Col=Coln, P=Pn, unif=unif)
   }
 
   EBSProfiles.res
@@ -203,27 +203,28 @@ GetCondition.default<-function(x, Condition = numeric())
  	Lii<-getLi(x)[[Condition]]
   Coli<-getCol(x)[[Condition]]
   Pi<-getP(x)[[Condition]]
+  unifi<-Priorm(x)
   if (Model(x)=="Poisson")
   {
   	hyper<-c(HyperParameters(x)[2*(Condition-1)+1],HyperParameters(x)[2*(Condition-1)+2])
-		GetCondition.res=new("EBS", model=Model(x), data=Data(x)[Condition,], length=getLength(x), Kmax=getK(x)[Condition], HyperParameters=hyper, Li=Lii, Col= Coli, matProba=Pi)
+		GetCondition.res=new("EBS", model=Model(x), data=Data(x)[Condition,], length=getLength(x), Kmax=getK(x)[Condition], HyperParameters=hyper, Li=Lii, Col= Coli, matProba=Pi, unif=unifi)
 	} else if (Model(x)=="Negative Binomial")
 	{
   	hyper<-c(HyperParameters(x)[2*(Condition-1)+1],HyperParameters(x)[2*(Condition-1)+2])
   	theta<-Overdispersion(x)[Condition]
-		GetCondition.res=new("EBS", model = Model(x), data = Data(x)[Condition,], length = getLength(x), Kmax = getK(x)[Condition], HyperParameters = hyper, overdispersion = theta, Li = Lii, Col = Coli, matProba = Pi)
+		GetCondition.res=new("EBS", model = Model(x), data = Data(x)[Condition,], length = getLength(x), Kmax = getK(x)[Condition], HyperParameters = hyper, overdispersion = theta, Li = Lii, Col = Coli, matProba = Pi, unif=unifi)
 	} else if (Model(x)=="Normal Homoscedastic")
 	{
   	hyper<-c(HyperParameters(x)[2*(Condition-1)+1],HyperParameters(x)[2*(Condition-1)+2])
   	var<-Variance(x)[Condition]
-		GetCondition.res=new("EBS", model = Model(x), data = Data(x)[Condition,], length = getLength(x), Kmax = getK(x)[Condition], HyperParameters = hyper, Variance = var, Li = Lii, Col = Coli, matProba = Pi)
+		GetCondition.res=new("EBS", model = Model(x), data = Data(x)[Condition,], length = getLength(x), Kmax = getK(x)[Condition], HyperParameters = hyper, Variance = var, Li = Lii, Col = Coli, matProba = Pi, unif=unifi)
 	} else if (Model(x)=="Normal Heteroscedastic")
 	{
 		hyper<- c(HyperParameters(x)[4*(Condition-1)+1], HyperParameters(x)[4*(Condition-1)+2], HyperParameters(x)[4*(Condition-1)+3], HyperParameters(x)[4*(Condition-1)+4])
-		GetCondition.res=new("EBS", model = Model(x), data = Data(x)[Condition,], length = getLength(x), Kmax = getK(x)[Condition], HyperParameters = hyper, Li = Lii, Col = Coli, matProba = Pi)  	
+		GetCondition.res=new("EBS", model = Model(x), data = Data(x)[Condition,], length = getLength(x), Kmax = getK(x)[Condition], HyperParameters = hyper, Li = Lii, Col = Coli, matProba = Pi, unif=unifi)  	
   } else
   {
-  	GetCondition.res=new("EBS", model = Model(x), length = getLength(x), Kmax = getK(x)[Condition], Li = Lii, Col = Coli, matProba = Pi)  
+  	GetCondition.res=new("EBS", model = Model(x), length = getLength(x), Kmax = getK(x)[Condition], Li = Lii, Col = Coli, matProba = Pi, unif=unifi)
   }
 	GetCondition.res
 }
@@ -413,7 +414,7 @@ EBSICLProfiles.default<-function(x, prior=numeric())
 	K<-rep(0,I)
 	for (i in 1:I)
 	{
-		aux<-EBSICL(GetCondition(x,i),prior=prior[i,])
+		aux<-EBSICL(GetCondition(x,i),prior=prior[i,1:(getK(x)[i])])
 		icl[[i]]<-aux$ICL
 		K[i]<-aux$NbICL
 	}

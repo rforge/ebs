@@ -13,6 +13,7 @@
 \alias{EBSProfiles-method,getKmax}
 \alias{EBSProfiles-method,getHyperParameters}
 \alias{EBSProfiles-method,getVariance}
+\alias{EBSProfiles-method,Priorm}
 
 
 \title{Class "EBSProfiles"}
@@ -40,7 +41,8 @@ Objects can be created by calls of the form \code{new("EBSProfiles", ...)}.
     \item{\code{overdispersion}:}{Object of class \code{"numeric"}, if model = Negative Binomial, the vector of overdispersions used in the analysis}
     \item{\code{Li}:}{Object of class \code{"numeric"}, a list of the matrix of each profile, of size Kmax*(length+1) where element [i,j] is the log-probability of interval [1,j[ being segmented in j segments}
     \item{\code{Col}:}{Object of class \code{"numeric"}, a list of the matrix of each profile, of size (length+1)*Kmax where element [i,j] is the log-probability of interval [i,n] being segmented in i segments}
-    \item{\code{P}:}{a list of the matrix of each profile, of size (length+1)*(length+1)where element [i,j] is the log-probability of interval [i,j[}
+    \item{\code{P}:}{a list of the matrix of each profile, of size (length+1)*(length+1) where element [i,j] is the log-probability of interval [i,j[}
+    \item{\code{unif}:}{a boolean stating whether the prior on the segmentation is uniform given the number of segments.}
   }
 }
 \section{Methods}{
@@ -56,6 +58,7 @@ Objects can be created by calls of the form \code{new("EBSProfiles", ...)}.
     \item{getLi}{\code{signature(object = "EBSProfiles")}: retrieves Li slot }
     \item{getCol}{\code{signature(object = "EBSProfiles")}: retrieves Col slot }
     \item{getP}{\code{signature(object = "EBSProfiles")}: retrieves P slot }
+    \item{Priorm}{\code{signature(object = "EBSProfiles")}: retrieves unif slot }
   }
 }
 

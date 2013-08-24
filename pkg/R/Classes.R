@@ -159,7 +159,7 @@ setMethod("getPriorm", "EBS",
 ############################################################
 
 setClass("EBSProfiles",
-         representation(model = "character", data= "matrix", length="numeric", NbConditions="numeric",  K="numeric", HyperParameters="numeric", Variance="numeric", overdispersion="numeric", Li="list", Col="list", P="list"),
+         representation(model = "character", data= "matrix", length="numeric", NbConditions="numeric",  K="numeric", HyperParameters="numeric", Variance="numeric", overdispersion="numeric", Li="list", Col="list", P="list", unif="logical"),
          prototype(model = "Poisson"),
 )
 
@@ -345,5 +345,14 @@ setMethod("NbConditions", "EBSProfiles",
 	return ( object@NbConditions )
 	}
 )
+
+setGeneric ("Priorm",
+	function(object){ standardGeneric ("Priorm" )}
+)
+setMethod("Priorm", "EBSProfiles",
+	function (object){
+	return ( object@unif )
+	}
+) 
 
 

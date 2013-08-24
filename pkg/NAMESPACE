@@ -36,6 +36,7 @@ exportMethods(
 							getVariance,
 							getOverdispersion,
 							getPriorm,
+							Priorm,
 							Li,
 							Col,
 							MatProba,
