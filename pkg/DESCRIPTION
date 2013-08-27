@@ -8,6 +8,7 @@ Maintainer: Alice Cleynen <alice.cleynen@agroparistech.fr>
 Description: This package performs an exact bayesian segmentation on data and returns the probabilities of breakpoints, an ICL criteria, comparison of change-point location, etc
 License: GPL (>= 2)
 LazyLoad: yes
-Depends: R (>= 2.0.0), methods, MASS
+Depends: R (>= 2.0.0)
+Imports: methods, MASS
 Repository: CRAN
 Date/Publication: 2013-08-26 
