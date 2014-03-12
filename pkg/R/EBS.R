@@ -199,10 +199,10 @@ EBSICL.default<-function(x, prior=numeric())
   k=0
   icl=as.vector(rep(0,Kmax))
   if (length(prior)==0)
-    prior=rep(as.double(1)/Kmax, Kmax)
+    prior=rep(1.0/Kmax, Kmax)
   if (length(prior)!=Kmax)
     stop("Prior size must be equal to Kmax")
-  if (sum(prior)!=as.double(1))
+  if (sum(prior)!=as.double(1.0))
     stop("Sum of elements of prior on K must be equal to one")
 
   Rep<-.C("ChooseICL",Siz = as.integer(n+1), Kmax=as.integer(Kmax), PriorK=as.double(prior), Col=as.double(DataCol), Li=as.double(DataLi), P = as.double(DataP), ICL=as.double(icl), kICL = as.integer(k), u=as.logical(unif))
@@ -225,10 +225,10 @@ EBSBIC.default<-function(x, prior=numeric())
   k=0
   bic=as.vector(rep(0,Kmax))
   if (length(prior)==0)
-    prior=rep(as.double(1)/Kmax, Kmax)
+    prior=rep(1.0/Kmax, Kmax)
   if (length(prior)!=Kmax)
     stop("Prior size must be equal to Kmax")
-  if (sum(prior)!=as.double(1))
+  if (sum(prior)!=as.double(1.0))
     stop("Sum of elements of prior on K must be equal to one")
 
   Rep<-.C("ChooseBIC",Siz = as.integer(n+1), Kmax=as.integer(Kmax), PriorK=as.double(prior), Col=as.double(DataCol), BIC = as.double(bic), kBIC = as.integer(k), u=as.logical(unif))
@@ -252,10 +252,10 @@ EBSPostK.default<-function(x, prior=numeric())
   unif=getPriorm(x)
   post=as.vector(rep(0,Kmax))
   if (length(prior)==0)
-    prior=rep(as.double(1)/Kmax, Kmax)
+    prior=rep(1.0/Kmax, Kmax)
   if (length(prior)!=Kmax)
     stop("Prior size must be equal to Kmax")
-  if (sum(prior)!=as.double(1))
+  if (sum(prior)!=as.double(1.0))
     stop("Sum of elements of prior on K must be equal to one")
 
   EBSPostK.res = exp(-EBSBIC(x,prior)$BIC+min(EBSBIC(x,prior)$BIC))/sum(exp(-EBSBIC(x,prior)$BIC+min(EBSBIC(x,prior)$BIC)))
@@ -388,7 +388,7 @@ TruncPois <-function(lambda,Kmax)
   sum<-0
   for (i in 1:Kmax)
   {
-    Vector[i]=exp(-lambda+i*log(lambda)-lgamma(i+1))
+    Vector[i]=exp(-lambda+i*log(lambda)-lgamma(as.double(i+1)))
     sum = sum + Vector[i]
   }
   for (i in 1:Kmax)

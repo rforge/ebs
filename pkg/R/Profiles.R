@@ -406,7 +406,7 @@ EBSICLProfiles.default<-function(x, prior=numeric())
 		prior<-matrix(0,nrow=I,ncol=KMAX)
 		for (i in 1:I)
 			for (k in 1:Kmax(x)[i])
-				prior[i,k]<-1/Kmax(x)[i]
+				prior[i,k]<-1.0/Kmax(x)[i]
 	}
 	if (nrow(prior)!=I)
 		stop('Need a prior on the number of segments for each profile')
