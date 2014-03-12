@@ -12,13 +12,14 @@
 #ifndef _Observations_h_
 #define _Observations_h_
 
-#include <math.h>
+
+#include <Rmath.h>
+
 #include <algorithm>
 #include <assert.h>
 #include <iostream>
-#include <fstream>
-#include <stdlib.h>
 
+#include <stdlib.h>
 #include "MyVector.h"
 #include "GeneralFunctions.h"
 
@@ -103,7 +104,7 @@ double Observations<T>::LogFactorialInSegment(int a, int b)
 	for (int j=1; j < (y[i] + 1); j++)
 	    S += log(j);
   */
-    S += lgamma(y[i]+1);
+    S += lgammafn(y[i]+1);
   return S;
 }
 
@@ -114,7 +115,7 @@ double Observations<T>::LogGammaPhiInSegment(int a, int b, double phi)
     return 0;
   double S = 0;
   for (int i = a; i < b; i++)
-    S += lgamma(y[i]+phi);
+    S += lgammafn(y[i]+phi);
   return S;
 }
 

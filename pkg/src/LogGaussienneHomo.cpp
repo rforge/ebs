@@ -2,6 +2,7 @@
 #include "LogGaussienneHomo.h"
 #include <math.h>
 #include <algorithm>
+#include <Rmath.h>
 #include <assert.h>
 #include <iostream>
 

@@ -7,10 +7,11 @@
  *
  */
 
-#include <fstream>
+
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <Rmath.h>
 #include "GeneralFunctions.h"
 #include "MyVector.h"
 
@@ -53,7 +54,7 @@ double Norma(int a, int b, int k) //log((b-a-1)choose(k-1))
 {
     if (a==b)
 	return 0;
-    double Res = (lgamma(b-a)-lgamma(k)-lgamma(b-a-k+1));
+    double Res = (lgammafn(b-a)-lgammafn(k)-lgammafn(b-a-k+1));
     return Res;
 }
 

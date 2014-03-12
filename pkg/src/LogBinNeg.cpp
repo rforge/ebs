@@ -1,5 +1,6 @@
 
 #include "LogBinNeg.h"
+#include <Rmath.h>
 #include <math.h>
 #include <algorithm>
 #include <assert.h>
@@ -28,7 +29,7 @@ double LogBinNeg::operator()(int a, int b)
   int S = LesObs.SumInSegment(a,b);
   double L = LesObs.LogFactorialInSegment(a,b);
   int n = b-a;
-  double Res = lgamma(beta+n*phi)+lgamma(S+alpha)-lgamma(alpha)-lgamma(beta) +lgamma(alpha+beta)-lgamma(beta+alpha+n*phi+S)-L;
+  double Res = lgammafn(beta+n*phi)+lgammafn(S+alpha)-lgammafn(alpha)-lgammafn(beta) +lgammafn(alpha+beta)-lgammafn(beta+alpha+n*phi+S)-L;
   return Res;
 }
 

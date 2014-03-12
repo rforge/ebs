@@ -1,7 +1,7 @@
 Package: EBS
 Type: Package
-Version: 2.8
-Date: 2013-08-31
+Version: 2.9
+Date: 2014-03-13 
 Title: Exact Bayesian Segmentation
 Author: Alice Cleynen
 Maintainer: Alice Cleynen <alice.cleynen@agroparistech.fr>
@@ -11,4 +11,4 @@ LazyLoad: yes
 Depends: R (>= 2.0.0)
 Imports: methods, MASS
 Repository: CRAN
-Date/Publication: 2013-08-31 
+Date/Publication: 2014-03-13 

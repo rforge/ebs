@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <stdlib.h>
+#include <Rmath.h>
 #include <algorithm>
 #include "GeneralFunctions.h"
 

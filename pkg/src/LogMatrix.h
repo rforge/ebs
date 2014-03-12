@@ -12,8 +12,9 @@
 #define _LogMatrix_h_
 
 #include <string>
-#include <fstream>
+
 #include <iostream>
+#include <Rmath.h>
 #include <vector>
 #include <list>
 #include <math.h>

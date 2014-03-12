@@ -2,6 +2,7 @@
 #include "LogPoisson.h"
 #include <math.h>
 #include <algorithm>
+#include <Rmath.h>
 #include <assert.h>
 #include <iostream>
 
@@ -26,7 +27,7 @@ double LogPoisson::operator()(int a, int b)
   int S = LesObs.SumInSegment(a,b);
   double L = LesObs.LogFactorialInSegment(a,b);
   int n = b-a;
-  double Res = lgamma(S+alpha)-(S+alpha)*log((double)(n)+beta)-L+alpha*log(beta)-lgamma(alpha);
+  double Res = lgammafn(S+alpha)-(S+alpha)*log((double)(n)+beta)-L+alpha*log(beta)-lgammafn(alpha);
   return Res;
 }
 

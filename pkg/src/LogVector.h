@@ -2,11 +2,12 @@
 #define _LogVector_h_
 
 #include <string>
-#include <fstream>
+
 #include <iostream>
 #include <vector>
 #include <list>
 #include <math.h>
+#include <Rmath.h>
 #include <algorithm>
 
 #include "LogMatrix.h"
