@@ -19,7 +19,6 @@
 
 
 bool IsDigit(char &x);
-int GetRandomNumber(int MinValue, int MaxValue);
 double lsum(double la, double lb);
 double sumoflogs(double la, double lb);
 double Norma(int a, int b, int k);

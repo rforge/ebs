@@ -60,14 +60,6 @@ double Norma(int a, int b, int k) //log((b-a-1)choose(k-1))
 
 
 
-int GetRandomNumber(int MinValue, int MaxValue)
-{
-  long int x = rand();
-  double y = (MaxValue - MinValue + 1) * ((double) x) / RAND_MAX;
-  int Res = MinValue + y;
-  return Res;
-}
-
 MyVector<int> IntersectLists(const MyVector<int> &A, const MyVector<int> &B)
 {
 	MyVector<int> Res;
