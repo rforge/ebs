@@ -1,6 +1,11 @@
 useDynLib(EBS)
 importFrom(MASS,fitdistr)
 import(methods)
+importFrom("grDevices", "dev.off", "pdf", "png", "postscript", "rgb")
+importFrom("graphics", "axis", "lines", "par", "plot", "plot.default","rect")
+importFrom("stats", "median")
+importFrom("utils", "str")
+
 exportPattern("^[[:alpha:]]+")
 
 export(
@@ -53,4 +58,22 @@ exportMethods(
 							getP,
 							NbConditions
 )
+
+
+S3method(CompCredibility, default) 
+S3method(EBSBIC, default) 
+S3method(EBSDistrib, default)
+S3method(EBSICL, default) 
+S3method(EBSICLProfiles, default) 
+S3method(EBSPlotProba, default)
+S3method(EBSPlotProbaProfiles, default) 
+S3method(EBSPostK, default) 
+S3method(EBSPrior, default)
+S3method(EBSPriorProfiles, default) 
+S3method(EBSProfiles, default)
+S3method(EBSStatistic, default)
+S3method(EBSegmentation, default) 
+S3method(GetCondition, default) 
+S3method(plot, Credibility)
+S3method(print, Credibility)
 

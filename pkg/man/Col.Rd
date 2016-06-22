@@ -19,7 +19,7 @@ Col(object)
 	A matrix of size (n+1)*Kmax  
 }
 \references{
-Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \url{Arxiv:1004.4347}
+Rigaill, Lebarbier & Robin (2012): Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \emph{Statistics and Computing}
 }
 \author{Alice Cleynen}
 

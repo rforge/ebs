@@ -23,7 +23,7 @@ EBSICL(x, prior=numeric())
 	\item{ICL}{Vector of length x$Kmax containing the ICL values.} 
 }
 \references{
-Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems 
+Rigaill, Lebarbier & Robin (2012): Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \emph{Statistics and Computing}
 }
 \author{Alice Cleynen}
 

@@ -38,7 +38,7 @@ For the Poisson model, Gamma(1,1) is used. For Negative Binomial model, Jeffreys
 }
 
 \references{
-Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems 
+Rigaill, Lebarbier & Robin (2012): Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \emph{Statistics and Computing}
 
 Johnson, Kotz & Kemp: Univariate Discrete Distributions
 

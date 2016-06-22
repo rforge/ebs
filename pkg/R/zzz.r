@@ -1,5 +1,5 @@
 .onAttach <- function(lib, pkg) {
-    packageStartupMessage("EBS v23.0 Loaded \n")
+    packageStartupMessage("EBS v3.1 Loaded \n")
    
     
 }

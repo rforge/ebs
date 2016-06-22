@@ -19,7 +19,9 @@ K = numeric(), p0=1/2)}
 \value{ The posterior probability of profiles having same change-point location  (see details).}
 
 \references{
-Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems 
+Rigaill, Lebarbier & Robin (2012): Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \emph{Statistics and Computing}
+
+Cleynen & Robin (2014): Comparing change-point location in independent series \emph{Statistics and Computing}
 
 Johnson, Kotz & Kemp: Univariate Discrete Distributions
 

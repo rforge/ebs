@@ -32,7 +32,7 @@ Must have 2<Kk<=x$Kmax
 	A vector containing distibution of kth changepoint in a segmentation in Kk segments.  
 }
 \references{
-Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \url{Arxiv:1004.4347}
+Rigaill, Lebarbier & Robin (2012): Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \emph{Statistics and Computing}
 }
 \author{Alice Cleynen}
 

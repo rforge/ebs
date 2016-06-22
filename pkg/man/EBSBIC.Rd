@@ -23,7 +23,7 @@ EBSBIC(x, prior=numeric())
 	\item{BIC}{A vector of length Kmax returning -Loglikelihood (data,K).}  
 }
 \references{
-Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \url{Arxiv:1004.4347}
+Rigaill, Lebarbier & Robin (2012): Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \emph{Statistics and Computing}
 }
 \author{Alice Cleynen}
 

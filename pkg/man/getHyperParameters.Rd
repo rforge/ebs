@@ -19,7 +19,9 @@ getHyperParameters(object)
 	A vector of HyperParameters used for the analysis of the dataset.
 }
 \references{
-Rigaill, Lebarbier & Robin: Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \url{Arxiv:1004.4347}
+Rigaill, Lebarbier & Robin (2012): Exact posterior distributions over the segmentation space and model selection for multiple change-point detection problems \emph{Statistics and Computing}
+
+Cleynen & Robin (2014): Comparing change-point location in independent series \emph{Statistics and Computing}
 }
 \author{Alice Cleynen}
 
