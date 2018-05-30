@@ -1,7 +1,7 @@
 Package: EBS
 Type: Package
-Version: 3.1
-Date: 2016-06-22 
+Version: 3.2
+Date: 2018-05-30
 Title: Exact Bayesian Segmentation
 Author: Alice Cleynen
 Maintainer: Alice Cleynen <alice.cleynen@umontpellier.fr>
@@ -10,5 +10,3 @@ License: GPL (>= 2)
 LazyLoad: yes
 Depends: R (>= 2.0.0)
 Imports: methods, MASS
-Repository: CRAN
-Date/Publication: 2016-06-22  
