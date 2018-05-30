@@ -12,8 +12,8 @@ Implements changepoint method in an exact baysian framework for finding single a
 \tabular{ll}{
 Package: \tab EBS\cr
 Type: \tab Package\cr
-Version: \tab 2.0 \cr
-Date: \tab 2012-11-26\cr
+Version: \tab 3.2 \cr
+Date: \tab 2018-05-30\cr
 License: \tab GPL\cr
 LazyLoad: \tab yes\cr
 }

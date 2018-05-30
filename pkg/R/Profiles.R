@@ -79,7 +79,7 @@ EBSProfiles.default <-function(data = numeric(), model=1, K=3, hyper = numeric()
   	if (homoscedastic)
   	{
   		theta<-rep(median(tall[!is.na(tall)]),NbConditions)
-  		while((theta<0)&h2<(n/2))
+  		while((theta[1]<0)&h2<(n/2))
   		{
   			h2<-2*h2
 				for(l in 1:NbConditions)

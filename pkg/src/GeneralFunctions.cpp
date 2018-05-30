@@ -1,12 +1,3 @@
-/*
- *  GeneralFunctions.cpp
- *  Segments
- *
- *  Created by Michel Koskas on 22/08/11.
- *  Copyright 2011 INRA, INA. All rights reserved.
- *
- */
-
 
 #include <iostream>
 #include <cstdlib>
@@ -57,7 +48,6 @@ double Norma(int a, int b, int k) //log((b-a-1)choose(k-1))
     double Res = (lgammafn(b-a)-lgammafn(k)-lgammafn(b-a-k+1));
     return Res;
 }
-
 
 
 MyVector<int> IntersectLists(const MyVector<int> &A, const MyVector<int> &B)

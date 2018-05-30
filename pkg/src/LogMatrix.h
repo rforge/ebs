@@ -1,12 +1,3 @@
-/*
- *  GeneralMatrix.h
- *  DistributionRuptures
- *
- *  Created by Michel Koskas on 07/07/11.
- *  Copyright 2011 INRA, INA. All rights reserved.
- *
- */
-
 
 #ifndef _LogMatrix_h_
 #define _LogMatrix_h_

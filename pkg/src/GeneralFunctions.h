@@ -1,11 +1,4 @@
-/*
- *  GeneralFunctions.h
- *  Segments
- *
- *  Created by Michel Koskas on 22/08/11.
- *  Copyright 2011 INRA, INA. All rights reserved.
- *
- */
+
 #ifndef _GeneralFunctions_h_
 #define _GeneralFunctions_h_
 

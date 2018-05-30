@@ -1,11 +1,3 @@
-/*
- *  MyVector.h
- *  Segments
- *
- *  Created by Michel Koskas on 09/12/11.
- *  Copyright 2011 INRA, INA. All rights reserved.
- *
- */
 
 #ifndef MyVector_h_
 #define MyVector_h_
