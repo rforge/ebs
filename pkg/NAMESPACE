@@ -1,4 +1,4 @@
-useDynLib(EBS,.registration = TRUE)
+useDynLib(EBS,.registration = TRUE,.fixes = "C_")
 importFrom(MASS,fitdistr)
 import(methods)
 importFrom("grDevices", "dev.off", "pdf", "png", "postscript", "rgb")
